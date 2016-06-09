@@ -27,6 +27,8 @@ Summer R 2016
 | Day  | Date  |  Module  | Resources  |  Description |
 |---|---|---|---|---|
 | 1  | 2016-06-13  | Homework 1  | [Try R](http://tryr.codeschool.com/)  | Finish all modules  |
+|---|---|---|---|---|
+
 <!--
 | 1  | 2016-01-04  | Module 1  | [HTML](Intro/lecture/Intro.html), [PDF](Intro/lecture/Intro.pdf)  | Class Introduction  |
 | 1  | 2016-01-04  | Module 2  | [HTML](RStudio/lecture/RStudio.html), [PDF](RStudio/lecture/RStudio.pdf) | R Studio  |
@@ -49,12 +51,13 @@ Summer R 2016
 | 5  | 2016-01-08 | Module 13a  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd), [Lab](Knitr/lab/illusion.Rmd) | Reproducible Research (A) |
 | 5  | 2016-01-08 | Module 13b  | [HTML](Simple_Knitr/lecture/Simple_Knitr.html), [PDF](Simple_Knitr/lecture/Simple_Knitr.pdf), [Code](Simple_Knitr/lecture/Simple_Knitr.Rmd) | Reproducible Research (B)|
 | 5  | 2016-01-08 | HW Review  |  |  |
+|---|---|---|---|---|
 -->
 
-|---|---|---|---|---|
+
 
 Feel free to submit typos/errors/etc via the github repository associated with the class: 
-https://github.com/andrewejaffe/winterR_2016
+https://github.com/andrewejaffe/summerR_2016
 
 ```{r, eval = FALSE, echo = FALSE}
 ## Render this file:
