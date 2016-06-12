@@ -1,11 +1,11 @@
 ---
 title: "Variables"
 author: "John Muschelli"
-date: "January 4, 2016"
+date: "June 13, 2016"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+  beamer_presentation: default
 subtitle: Basic R
 ---
 
@@ -30,7 +30,7 @@ Add a comment header to day1.R :`#` is the comment symbol
 #################
 # Title: Demo R Script
 # Author: John Muschelli
-# Date: 1/4/2016
+# Date: 6/13/2016
 # Purpose: Demonstrate comments in R
 ###################
  
@@ -127,7 +127,7 @@ Try assigning your full name to an R variable called `name`
 Try assigning your full name to an R variable called `name`
 
 ```{r myName}
-name = "Andrew Jaffe"
+name = "John Muschelli"
 name
 ```
 
@@ -150,7 +150,7 @@ Try assigning your first and last name as 2 separate character strings into a si
 Try assigning your first and last name as 2 separate character strings into a length-2 vector called `name2`
 
 ```{r myName2}
-name2 = c("Andrew","Jaffe")
+name2 = c("John","Muschelli")
 name2
 ```
 

@@ -5,7 +5,7 @@ opts_chunk$set(comment = "")
 ## ----workingDirectory,eval=FALSE-----------------------------------------
 ## ## get the working directory
 ## getwd()
-## # setwd("~/winterR_2016/Lectures")
+## # setwd("~/summerR_2016/Lectures")
 
 ## ----directoryNav--------------------------------------------------------
 dir("./") # shows directory contents
