@@ -1,13 +1,13 @@
 ## 140.886: Intro to R
 ## Homework 2
-## Assigned Date: 1/4/2016
-## Due Date: 1/6/2016
+## Assigned Date: 6/13/2016
+## Due Date: 8:30am on 6/16/2016
 
 ### Please use `knitr` to write up this homework.
 
 # Instructions: 
-# 1)	Get the dataset: http://www.aejaffe.com/winterR_2016/data/kaggleCarAuction.zip
-# 2)	Read the "dictionary": http://www.aejaffe.com/winterR_2016/data/Carvana_Data_Dictionary.txt
+# 1)	Get the dataset: http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.zip
+# 2)	Read the "dictionary": http://www.aejaffe.com/summerR_2016/data/Carvana_Data_Dictionary.txt
 # This is a dataset from the "Kaggle" website, which hosts competitions for prediction and machine learning. 
 # More details on this dataset are here: 
 # http://www.kaggle.com/c/DontGetKicked/details/Background
@@ -20,7 +20,7 @@
 
 # 3)	What is the range of the manufacturer's years of the vehicles? How many cars were from before 2004, and what percent/proportion of the cars are these older models?
 
-# 4)	Drop any vehicles that cost less than $1000 - how many vehicles were removed, and how much were they? The rest of the questions expect answers based on this reduced dataset.
+# 4)	Drop any vehicles that cost less than $1500 - how many vehicles were removed, and how much were they? The rest of the questions expect answers based on this reduced dataset.
 
 # 5)	How many different vehicle a) manufacturers/makes b) models and c) sizes are there?
 
@@ -33,14 +33,14 @@
 # 9)	Which variables of cost, odometer reading, and/or warranty (if any) visually appear to associate with a car being a "lemon"/bad purchase?
 
 # 10)	 How many vehicles:
-	# a.	Were red and have fewer than 50,000 miles?
+	# a.	Were red and have fewer than 30,000 miles?
 
-	# b.	Are made by GMC and were purchased in Florida? 
+	# b.	Are made by GMC and were purchased in Texas? 
 
-	# c.	Are green or white?
+	# c.	Are blue or red?
 
-	# d.	Are made by Mazda or Nissan and are black or silver? 
+	# d.	Are made by Chrysler or Nissan and are white or silver? 
 
-	# e.	Are automatic, blue, Pontiac cars with under 60,000 miles? 
+	# e.	Are automatic, blue, Pontiac cars with under 40,000 miles? 
 
 	

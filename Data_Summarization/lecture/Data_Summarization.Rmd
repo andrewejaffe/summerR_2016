@@ -1,7 +1,7 @@
 ---
 title: "Data Summarization"
 author: "Andrew Jaffe"
-date: "January 5, 2016"
+date: "June 14, 2016"
 output:
   beamer_presentation: default
   ioslides_presentation:
@@ -65,10 +65,10 @@ quantile(x,na.rm=TRUE)
 
 Please download the Charm City Circulator data:
 
-http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv
+http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv
 
 ```{r}
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
             header=TRUE,as.is=TRUE)
 ```
 
@@ -154,7 +154,7 @@ tapply(circ2$daily, circ2$day, max, na.rm=TRUE)
     * `plot(x,y)`: scatterplot of x and y
     * `boxplot(y~x)`: boxplot of y against levels of x
     * `hist(x)`: histogram of x
-    * `density(X)`: kernel density plot of x
+    * `density(x)`: kernel density plot of x
     
 ## Basic Plots
 

@@ -1,11 +1,11 @@
 ## 140.886: Intro to R
 ## Homework 2
-## Assigned Date: 1/4/2016
-## Due Date: 1/6/2016
+## Assigned Date: 6/13/2016
+## Due Date: 8:30am on 6/16/2016
 
 # Instructions: 
-# 1)	Get the dataset: http://www.aejaffe.com/winterR_2016/data/kaggleCarAuction.zip
-# 2)	Read the "dictionary": http://www.aejaffe.com/winterR_2016/data/Carvana_Data_Dictionary.txt
+# 1)	Get the dataset: http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.zip
+# 2)	Read the "dictionary": http://www.aejaffe.com/summerR_2016/data/Carvana_Data_Dictionary.txt
 # This is a dataset from the "Kaggle" website, which hosts competitions for prediction and machine learning. 
 # More details on this dataset are here: 
 # http://www.kaggle.com/c/DontGetKicked/details/Background
@@ -18,7 +18,7 @@ cars = read.csv("../data/kaggleCarAuction.csv",header=TRUE,as.is=TRUE)
 
 library(stringr)
 library(dplyr)
-key = read.delim("http://www.aejaffe.com/winterR_2016/data/Carvana_Data_Dictionary.txt",
+key = read.delim("http://www.aejaffe.com/summerR_2016/data/Carvana_Data_Dictionary.txt",
 	as.is=TRUE, strip.white=TRUE)
 save(cars,key,file="kaggle.rda")
 
@@ -30,8 +30,8 @@ range(cars$VehYear)
 sum(cars$VehYear < 2004)
 mean(cars$VehYear < 2004)
 
-# 4)	Drop any vehicles that cost less than $1000 - how many vehicles were removed, and how much were they? The rest of the questions expect answers based on this reduced dataset.
-cars = filter(cars, VehBCost > 1000)
+# 4)	Drop any vehicles that cost less than $1500 - how many vehicles were removed, and how much were they? The rest of the questions expect answers based on this reduced dataset.
+cars = filter(cars, VehBCost > 1500)
 dim(cars)
 
 # 5)	How many different vehicle a) manufacturers/makes b) models and c) sizes are there?
@@ -71,25 +71,25 @@ boxplot(VehOdo ~ cars$IsBadBuy, data=cars, ylab= "Odometer")
 boxplot(WarrantyCost ~ cars$IsBadBuy, data=cars, ylab="Warranty")
 
 # 10)	 How many vehicles:
-# a.	Were red and have fewer than 50,000 miles?
-sum(cars$Color == "RED" & cars$VehOdo < 50000)
+# a.	Were red and have fewer than 30,000 miles?
+sum(cars$Color == "RED" & cars$VehOdo < 30000)
 
-# b.	Are made by GMC and were purchased in Florida? 
-sum(cars$Make == "GMC" & cars$VNST == "FL")
+# b.	Are made by GMC and were purchased in Texas? 
+sum(cars$Make == "GMC" & cars$VNST == "TX")
 
-# c.	Are green or white?
-sum(cars$Color == "GREEN" | cars$Color == "WHITE" )
-sum(cars$Color %in% c("GREEN","WHITE"))
+# c.	Are blue or red?
+sum(cars$Color == "BLUE" | cars$Color == "RED" )
+sum(cars$Color %in% c("BLUE","RED"))
 
-# d.	Are made by Mazda or Nissan and are black or silver? 
-sum((cars$Make == "MAZDA" | cars$Make=="NISSAN") & (cars$Color == "GREEN" | cars$Color == "WHITE" ))
-sum(cars$Make %in% c("MAZDA","NISSAN") & 
-	cars$Color %in% c("BLACK","SILVER" ))
+# d.	Are made by Chrysler or Nissan and are white or silver? 
+sum((cars$Make == "CHRYSLER" | cars$Make=="NISSAN") & (cars$Color == "WHITE" | cars$Color == "WHITE" ))
+sum(cars$Make %in% c("CHRYSLER","NISSAN") & 
+	cars$Color %in% c("WHITE","SILVER" ))
 
-# e.	Are automatic, blue, Pontiac cars with under 60,000 miles? 
+# e.	Are automatic, blue, Pontiac cars with under 40,000 miles? 
 sum(cars$Transmission == "AUTO" & cars$Color=="BLUE" & 
-	cars$Make == "PONTIAC" & cars$VehOdo < 60000)
+	cars$Make == "PONTIAC" & cars$VehOdo < 40000)
 sum(cars$Transmission == "AUTO" & cars$Color=="BLUE" & 
-	cars$Make == "PONTIAC" & cars$VehOdo < 60000)
+	cars$Make == "PONTIAC" & cars$VehOdo < 40000)
 
 	
