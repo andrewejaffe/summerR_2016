@@ -58,3 +58,12 @@ colnames(carsSub) = toupper(colnames(carsSub))
 # 8. Re-order the rows of `carsSub` by weight in increasing order
 arrange(carsSub, WT)
 carsSub[ order(carsSub$WT),]
+
+
+# 9. Copy mtcars into a variable called cars and rename mpg in cars to MPG
+cars = mtcars
+# cars$MPG = cars$mpg
+cars = rename(cars, MPG = mpg)
+
+# 10. Subset the columns from mtcars that end in "p" and call it pvars
+pvars = select(carsSub, ends_with("p"))
