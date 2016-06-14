@@ -3,13 +3,19 @@ title: "Arrays and Useful R functions"
 author: "John Muschelli"
 date: "June 14, 2016"
 output:
-  ioslides_presentation:
+  ioslides_presentation: null
   css: ../../styles.css
+  beamer_presentation: default
 beamer_presentation: default
 ---
 
 ```{r, echo = FALSE, message=FALSE}
 library(dplyr)
+# paste/paste0 will be covered later
+circ = read.csv(
+  paste0("http://www.aejaffe.com/summerR_2016/data",
+         "/Charm_City_Circulator_Ridership.csv"), 
+            header = TRUE, as.is = TRUE)
 ``` 
 
 ## Data Frames versus Matrices

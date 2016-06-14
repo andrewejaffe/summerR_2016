@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Data Classes</title>
+  <title>Arrays and Useful R functions</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +26,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Data Classes',
+                title: 'Arrays and Useful R functions',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -75,7 +75,6 @@
 
   </style>
 
-  <link href="data:text/css;charset=utf-8,pre%20%7B%0Afont%2Dfamily%3A%20%27Source%20Code%20Pro%27%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2024px%3B%0Aline%2Dheight%3A%2024px%3B%0Apadding%3A%2010px%200%2010px%2060px%3B%0Aletter%2Dspacing%3A%20%2D1px%3B%0Amargin%2Dbottom%3A%208px%3B%0Awidth%3A%20106%25%3B%0Aleft%3A%20%2D60px%3B%0Aposition%3A%20relative%3B%0A%2Dwebkit%2Dbox%2Dsizing%3A%20border%2Dbox%3B%0A%2Dmoz%2Dbox%2Dsizing%3A%20border%2Dbox%3B%0Abox%2Dsizing%3A%20border%2Dbox%3B%0A%0A%7D%0A%0Abody%7B%0Afont%2Dfamily%3A%20Helvetica%3B%0Afont%2Dsize%3A%2016pt%3B%0A%7D%0A%0Ah1%7B%0Afont%2Dsize%3A%2028pt%3B%0A%7D%0Ah2%7B%0Afont%2Dsize%3A%2024pt%3B%0A%7D%0Ah3%7B%0Afont%2Dsize%3A%2020pt%3B%0A%7D%0A%2Eemphasized%20%7B%0Afont%2Dsize%3A%201%2E2em%3B%0A%7D%0A%2Esmall%20%7B%0Afont%2Dsize%3A%200%2E8em%3B%0A%7D%0Astrong%20%7B%20font%2Dweight%3A%20bold%3B%0Acolor%3A%20black%3B%0A%7D" rel="stylesheet" type="text/css" />
 
 
 </head>
@@ -94,577 +93,107 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Data Classes:</h2></hgroup><article  id="data-classes">
+<slide class=''><hgroup><h2>Data Frames versus Matrices</h2></hgroup><article  id="data-frames-versus-matrices">
+
+<p>You will likely use data.frame class for a lot of data cleaning and analysis. However, some operations that rely on matrix multiplication (like performing many linear regressions) are (much) faster with matrices. Also, as we will touch on later, some functions for iterating over data will return the matrix class, or will be placed in empty matrices that can then be converted to data.frames</p>
+
+</article></slide><slide class=''><hgroup><h2>Data Frames versus Matrices</h2></hgroup><article  id="data-frames-versus-matrices-1">
+
+<p>There is also additional summarization functions for matrices (and not data.frames) in the <code>matrixStats</code> package, like <code>rowMins()</code>, <code>colMaxs()</code>, etc.</p>
+
+<pre class = 'prettyprint lang-r'>library(matrixStats,quietly = TRUE)</pre>
+
+<pre >## 
+## Attaching package: &#39;matrixStats&#39;</pre>
+
+<pre >## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     count</pre>
+
+<pre class = 'prettyprint lang-r'>avgs = select(circ, ends_with(&quot;Average&quot;))
+rowMins(as.matrix(avgs),na.rm=TRUE)[500:510]</pre>
+
+<pre >##  [1] 3538.5 3402.5 3862.5 3347.5 2837.5 2704.0 3138.5 3287.5 3275.0 3917.5
+## [11] 3046.0</pre>
+
+</article></slide><slide class=''><hgroup><h2>Data Classes</h2></hgroup><article  id="data-classes">
+
+<p>Extensions of &quot;normal&quot; data classes:</p>
 
 <ul>
-<li>One dimensional classes (&#39;vectors&#39;):
-
-<ul>
-<li>Character: strings or individual characters, quoted</li>
-<li>Numeric: any real number(s)</li>
-<li>Integer: any integer(s)/whole numbers</li>
-<li>Factor: categorical/qualitative variables</li>
-<li>Logical: variables composed of TRUE or FALSE</li>
-<li>Date/POSIXct: represents calendar dates and times</li>
-</ul></li>
+<li>N-dimensional classes:</li>
+<li>Arrays: any extension of matrices with more than 2 dimensions, e.g. 3x3x3 cube</li>
+<li>Lists: more flexible container for R objects.</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Character and numeric</h2></hgroup><article  id="character-and-numeric">
+</article></slide><slide class=''><hgroup><h2>Arrays</h2></hgroup><article  id="arrays">
 
-<p>We have already covered <code>character</code> and <code>numeric</code> classes.</p>
+<p>These are just more flexible matrices - you should just be made aware of them as some functions return objects of this class, for example, cross tabulating over more than 2 variables and the <code>tapply</code> function.</p>
 
-<pre class = 'prettyprint lang-r'>class(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
+</article></slide><slide class=''><hgroup><h2>Arrays</h2></hgroup><article  id="arrays-1">
 
-<pre >## [1] &quot;character&quot;</pre>
+<p>Selecting from arrays is similar to matrices, just with additional commas for the additional slots.</p>
 
-<pre class = 'prettyprint lang-r'>class(c(1, 4, 7))</pre>
-
-<pre >## [1] &quot;numeric&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Integer</h2></hgroup><article  id="integer">
-
-<p><code>Integer</code> is a special subset of <code>numeric</code> that contains only whole numbers</p>
-
-<p>A sequence of numbers is an example of the integer class</p>
-
-<pre class = 'prettyprint lang-r'>x = seq(from = 1, to = 5) # seq() is a function
-x</pre>
-
-<pre >## [1] 1 2 3 4 5</pre>
-
-<pre class = 'prettyprint lang-r'>class(x)</pre>
-
-<pre >## [1] &quot;integer&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Integer</h2></hgroup><article  id="integer-1">
-
-<p>The colon <code>:</code> is a shortcut for making sequences of numbers</p>
-
-<p>It makes consecutive integer sequence from <code>[num1]</code> to <code>[num2]</code> by 1</p>
-
-<pre class = 'prettyprint lang-r'>1:5</pre>
-
-<pre >## [1] 1 2 3 4 5</pre>
-
-</article></slide><slide class=''><hgroup><h2>Logical</h2></hgroup><article  id="logical">
-
-<p><code>logical</code> is a class that only has two possible elements: <code>TRUE</code> and <code>FALSE</code></p>
-
-<pre class = 'prettyprint lang-r'>x = c(TRUE, FALSE, TRUE, TRUE, FALSE)
-class(x)</pre>
-
-<pre >## [1] &quot;logical&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>is.numeric(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
-
-<pre >## [1] FALSE</pre>
-
-<pre class = 'prettyprint lang-r'>is.character(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
-
-<pre >## [1] TRUE</pre>
-
-</article></slide><slide class=''><hgroup><h2>Logical</h2></hgroup><article  id="logical-1">
-
-<p>Note that <code>logical</code> elements are NOT in quotes.</p>
-
-<pre class = 'prettyprint lang-r'>z = c(&quot;TRUE&quot;, &quot;FALSE&quot;, &quot;TRUE&quot;, &quot;FALSE&quot;)
-class(z)</pre>
-
-<pre >## [1] &quot;character&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>as.logical(z)</pre>
-
-<pre >## [1]  TRUE FALSE  TRUE FALSE</pre>
-
-<p>Bonus: <code>sum()</code> and <code>mean()</code> work on <code>logical</code> vectors - they return the total and proportion of <code>TRUE</code> elements, respectively.</p>
-
-<pre class = 'prettyprint lang-r'>sum(as.logical(z))</pre>
-
-<pre >## [1] 2</pre>
-
-</article></slide><slide class=''><hgroup><h2>General Class Information</h2></hgroup><article  id="general-class-information">
-
-<p>There are two useful functions associated with practically all R classes, which relate to logically checking the underlying class (<code>is.CLASS_()</code>) and coercing between classes (<code>as.CLASS_()</code>).</p>
-
-<pre class = 'prettyprint lang-r'>is.numeric(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
-
-<pre >## [1] FALSE</pre>
-
-<pre class = 'prettyprint lang-r'>is.character(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
-
-<pre >## [1] TRUE</pre>
-
-</article></slide><slide class=''><hgroup><h2>General Class Information</h2></hgroup><article  id="general-class-information-1">
-
-<p>There are two useful functions associated with practically all R classes, which relate to logically checking the underlying class (<code>is.CLASS_()</code>) and coercing between classes (<code>as.CLASS_()</code>).</p>
-
-<pre class = 'prettyprint lang-r'>as.character(c(1, 4, 7))</pre>
-
-<pre >## [1] &quot;1&quot; &quot;4&quot; &quot;7&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>as.numeric(c(&quot;Andrew&quot;, &quot;Jaffe&quot;))</pre>
-
-<pre >## Warning: NAs introduced by coercion</pre>
-
-<pre >## [1] NA NA</pre>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors">
-
-<p>A <code>factor</code> is a special <code>character</code> vector where the elements have pre-defined groups or &#39;levels&#39;. You can think of these as qualitative or categorical variables:</p>
-
-<pre class = 'prettyprint lang-r'>x = factor(c(&quot;boy&quot;, &quot;girl&quot;, &quot;girl&quot;, &quot;boy&quot;, &quot;girl&quot;))
-x </pre>
-
-<pre >## [1] boy  girl girl boy  girl
-## Levels: boy girl</pre>
-
-<pre class = 'prettyprint lang-r'>class(x)</pre>
-
-<pre >## [1] &quot;factor&quot;</pre>
-
-<p>Note that levels are, by default, in alphanumerical order.</p>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors-1">
-
-<p>Factors are used to represent categorical data, and can also be used for ordinal data (ie categories have an intrinsic ordering)</p>
-
-<p>Note that R reads in character strings as factors by default in functions like <code>read.table()</code></p>
-
-<p>&#39;The function factor is used to encode a vector as a factor (the terms &#39;category&#39; and &#39;enumerated type&#39; are also used for factors). If argument ordered is TRUE, the factor levels are assumed to be ordered.&#39;</p>
-
-<pre >factor(x = character(), levels, labels = levels,
-       exclude = NA, ordered = is.ordered(x))</pre>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors-2">
-
-<p>Suppose we have a vector of case-control status</p>
-
-<pre class = 'prettyprint lang-r'>cc = factor(c(&quot;case&quot;,&quot;case&quot;,&quot;case&quot;,
-        &quot;control&quot;,&quot;control&quot;,&quot;control&quot;))
-cc</pre>
-
-<pre >## [1] case    case    case    control control control
-## Levels: case control</pre>
-
-<pre class = 'prettyprint lang-r'>levels(cc) = c(&quot;control&quot;,&quot;case&quot;)
-cc</pre>
-
-<pre >## [1] control control control case    case    case   
-## Levels: control case</pre>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors-3">
-
-<p>Note that the levels are alphabetically ordered by default. We can also specify the levels within the factor call</p>
-
-<pre class = 'prettyprint lang-r'>casecontrol = c(&quot;case&quot;,&quot;case&quot;,&quot;case&quot;,&quot;control&quot;,
-          &quot;control&quot;,&quot;control&quot;)
-factor(casecontrol, levels = c(&quot;control&quot;,&quot;case&quot;) )</pre>
-
-<pre >## [1] case    case    case    control control control
-## Levels: control case</pre>
-
-<pre class = 'prettyprint lang-r'>factor(casecontrol, levels = c(&quot;control&quot;,&quot;case&quot;), 
-       ordered=TRUE)</pre>
-
-<pre >## [1] case    case    case    control control control
-## Levels: control &lt; case</pre>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors-4">
-
-<p>Factors can be converted to <code>numeric</code> or <code>character</code> very easily</p>
-
-<pre class = 'prettyprint lang-r'>x = factor(casecontrol,
-        levels = c(&quot;control&quot;,&quot;case&quot;) )
-as.character(x)</pre>
-
-<pre >## [1] &quot;case&quot;    &quot;case&quot;    &quot;case&quot;    &quot;control&quot; &quot;control&quot; &quot;control&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>as.numeric(x)</pre>
-
-<pre >## [1] 2 2 2 1 1 1</pre>
-
-</article></slide><slide class=''><hgroup><h2>Factors</h2></hgroup><article  id="factors-5">
-
-<p>However, you need to be careful modifying the labels of existing factors, as its quite easy to alter the meaning of the underlying data.</p>
-
-<pre class = 'prettyprint lang-r'>xCopy = x
-levels(xCopy) = c(&quot;case&quot;, &quot;control&quot;) # wrong way
-xCopy        </pre>
-
-<pre >## [1] control control control case    case    case   
-## Levels: case control</pre>
-
-<pre class = 'prettyprint lang-r'>as.character(xCopy) # labels switched</pre>
-
-<pre >## [1] &quot;control&quot; &quot;control&quot; &quot;control&quot; &quot;case&quot;    &quot;case&quot;    &quot;case&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>as.numeric(xCopy)</pre>
-
-<pre >## [1] 2 2 2 1 1 1</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables">
-
-<p>The <code>rep()</code> [&quot;repeat&quot;] function is useful for creating new variables</p>
-
-<pre class = 'prettyprint lang-r'>bg = rep(c(&quot;boy&quot;,&quot;girl&quot;),each=50)
-head(bg)</pre>
-
-<pre >## [1] &quot;boy&quot; &quot;boy&quot; &quot;boy&quot; &quot;boy&quot; &quot;boy&quot; &quot;boy&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>bg2 = rep(c(&quot;boy&quot;,&quot;girl&quot;),times=50)
-head(bg2)</pre>
-
-<pre >## [1] &quot;boy&quot;  &quot;girl&quot; &quot;boy&quot;  &quot;girl&quot; &quot;boy&quot;  &quot;girl&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>length(bg) == length(bg2)</pre>
-
-<pre >## [1] TRUE</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-1">
-
-<p>One frequently-used tool is creating categorical variables out of continuous variables, like generating quantiles of a specific continuously measured variable.</p>
-
-<p>A general function for creating new variables based on existing variables is the <code>ifelse()</code> function, which &quot;returns a value with the same shape as test which is filled with elements selected from either yes or no depending on whether the element of test is <code>TRUE</code> or <code>FALSE</code>.&quot;</p>
-
-<pre >ifelse(test, yes, no)
-
-# test: an object which can be coerced
-    to logical mode.
-# yes: return values for true elements of test.
-# no: return values for false elements of test.</pre>
-
-</article></slide><slide class=''><hgroup><h2>Charm City Circulator data</h2></hgroup><article  id="charm-city-circulator-data">
-
-<p>Please download the Charm City Circulator data:</p>
-
-<p><a href='http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv' title=''>http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv</a></p>
-
-<pre class = 'prettyprint lang-r'># paste/paste0 will be covered later
-circ = read.csv(
-  paste0(&quot;http://www.aejaffe.com/summerR_2016/data&quot;,
-         &quot;/Charm_City_Circulator_Ridership.csv&quot;), 
-            header = TRUE, as.is = TRUE)</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-2">
-
-<p>For example, we can create a new variable that records whether daily ridership on the Circulator was above 10,000.</p>
-
-<pre class = 'prettyprint lang-r'>hi_rider = ifelse(circ$daily &gt; 10000, &quot;high&quot;, &quot;low&quot;)
-hi_rider = factor(hi_rider, levels = c(&quot;low&quot;,&quot;high&quot;))
-head(hi_rider)</pre>
-
-<pre >## [1] low low low low low low
-## Levels: low high</pre>
-
-<pre class = 'prettyprint lang-r'>table(hi_rider)</pre>
-
-<pre >## hi_rider
-##  low high 
-##  740  282</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-3">
-
-<p>You can also nest <code>ifelse()</code> within itself to create 3 levels of a variable.</p>
-
-<pre class = 'prettyprint lang-r'>riderLevels = ifelse(circ$daily &lt; 10000, &quot;low&quot;, 
-                  ifelse(circ$daily &gt; 20000,
-                  &quot;high&quot;, &quot;med&quot;))
-riderLevels = factor(riderLevels, 
-              levels = c(&quot;low&quot;,&quot;med&quot;,&quot;high&quot;))
-head(riderLevels)</pre>
-
-<pre >## [1] low low low low low low
-## Levels: low med high</pre>
-
-<pre class = 'prettyprint lang-r'>table(riderLevels)</pre>
-
-<pre >## riderLevels
-##  low  med high 
-##  740  280    2</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-4">
-
-<p>However, it&#39;s much easier to use <code>cut()</code> to create categorical variables from continuous variables.</p>
-
-<p>&#39;cut divides the range of x into intervals and codes the values in x according to which interval they fall. The leftmost interval corresponds to level one, the next leftmost to level two and so on.&#39;</p>
-
-<pre >cut(x, breaks, labels = NULL, include.lowest = FALSE, 
-  right = TRUE, dig.lab = 3,
-  ordered_result = FALSE, ...)</pre>
-
-</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-5">
-
-<p><code>x</code>: a numeric vector which is to be converted to a factor by cutting.</p>
-
-<p><code>breaks</code>: either a numeric vector of two or more unique cut points or a single number (greater than or equal to 2) giving the number of intervals into which x is to be cut.</p>
-
-<p><code>labels</code>: labels for the levels of the resulting category. By default, labels are constructed using &quot;(a,b]&quot; interval notation. If <code>labels = FALSE</code>, simple integer codes are returned instead of a factor.</p>
-
-</article></slide><slide class=''><hgroup><h2>Cut</h2></hgroup><article  id="cut">
-
-<p>Now that we know more about factors, <code>cut()</code> will make more sense:</p>
-
-<pre class = 'prettyprint lang-r'>x = 1:100
-cx = cut(x, breaks=c(0,10,25,50,100))
-head(cx)  </pre>
-
-<pre >## [1] (0,10] (0,10] (0,10] (0,10] (0,10] (0,10]
-## Levels: (0,10] (10,25] (25,50] (50,100]</pre>
-
-<pre class = 'prettyprint lang-r'>table(cx)</pre>
-
-<pre >## cx
-##   (0,10]  (10,25]  (25,50] (50,100] 
-##       10       15       25       50</pre>
-
-</article></slide><slide class=''><hgroup><h2>Cut</h2></hgroup><article  id="cut-1">
-
-<p>We can also leave off the labels</p>
-
-<pre class = 'prettyprint lang-r'>cx = cut(x, breaks=c(0,10,25,50,100), labels=FALSE)
-head(cx)  </pre>
-
-<pre >## [1] 1 1 1 1 1 1</pre>
-
-<pre class = 'prettyprint lang-r'>table(cx)</pre>
-
-<pre >## cx
-##  1  2  3  4 
-## 10 15 25 50</pre>
-
-</article></slide><slide class=''><hgroup><h2>Cut</h2></hgroup><article  id="cut-2">
-
-<p>Note that you have to specify the endpoints of the data, otherwise some of the categories will not be created</p>
-
-<pre class = 'prettyprint lang-r'>cx = cut(x, breaks=c(10,25,50), labels=FALSE)
-head(cx)  </pre>
-
-<pre >## [1] NA NA NA NA NA NA</pre>
-
-<pre class = 'prettyprint lang-r'>table(cx)</pre>
-
-<pre >## cx
-##  1  2 
-## 15 25</pre>
-
-<pre class = 'prettyprint lang-r'>table(cx,useNA=&quot;ifany&quot;)</pre>
-
-<pre >## cx
-##    1    2 &lt;NA&gt; 
-##   15   25   60</pre>
-
-</article></slide><slide class=''><hgroup><h2>Date</h2></hgroup><article  id="date">
-
-<p>You can convert date-like strings in the <code>Date</code> class (<a href='http://www.statmethods.net/input/dates.html' title=''>http://www.statmethods.net/input/dates.html</a> for more info)</p>
-
-<pre class = 'prettyprint lang-r'>head(sort(circ$date))</pre>
-
-<pre >## [1] &quot;01/01/2011&quot; &quot;01/01/2012&quot; &quot;01/01/2013&quot; &quot;01/02/2011&quot; &quot;01/02/2012&quot;
-## [6] &quot;01/02/2013&quot;</pre>
-
-<pre class = 'prettyprint lang-r'># creating a date for sorting
-circ$newDate &lt;- as.Date(circ$date, &quot;%m/%d/%Y&quot;)
-head(circ$newDate)</pre>
-
-<pre >## [1] &quot;2010-01-11&quot; &quot;2010-01-12&quot; &quot;2010-01-13&quot; &quot;2010-01-14&quot; &quot;2010-01-15&quot;
-## [6] &quot;2010-01-16&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>range(circ$newDate)</pre>
-
-<pre >## [1] &quot;2010-01-11&quot; &quot;2013-03-01&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Date</h2></hgroup><article  id="date-1">
-
-<p>However, the <code>lubridate</code> package is much easier for generating explicit dates:</p>
-
-<pre class = 'prettyprint lang-r'>library(lubridate) # great for dates!
-circ = mutate(circ, newDate2 = mdy(date))
-head(circ$newDate2)</pre>
-
-<pre >## [1] &quot;2010-01-11&quot; &quot;2010-01-12&quot; &quot;2010-01-13&quot; &quot;2010-01-14&quot; &quot;2010-01-15&quot;
-## [6] &quot;2010-01-16&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>range(circ$newDate2) # gives you the range of the data</pre>
-
-<pre >## [1] &quot;2010-01-11&quot; &quot;2013-03-01&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>POSIXct</h2></hgroup><article  id="posixct">
-
-<p>The <code>POSIXct</code> class is like a more general date format (with hours, minutes, seconds).</p>
-
-<pre class = 'prettyprint lang-r'>theTime = Sys.time()
-theTime</pre>
-
-<pre >## [1] &quot;2016-06-13 21:49:03 EDT&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>class(theTime)</pre>
-
-<pre >## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>theTime + as.period(20, unit = &quot;minutes&quot;) # the future</pre>
-
-<pre >## [1] &quot;2016-06-13 22:09:03 EDT&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Data Classes:</h2></hgroup><article  id="data-classes-1">
-
-<ul>
-<li>Two dimensional classes:
-
-<ul>
-<li><code>data.frame</code>: traditional &#39;Excel&#39; spreadsheets
-
-<ul>
-<li>Each column can have a different class, from above</li>
-</ul></li>
-<li>Matrix: two-dimensional data, composed of rows and columns. Unlike data frames, the entire matrix is composed of one R class, e.g. all numeric or all characters.</li>
-</ul></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Matrices</h2></hgroup><article  id="matrices">
-
-<pre class = 'prettyprint lang-r'>n = 1:9 
-n</pre>
-
-<pre >## [1] 1 2 3 4 5 6 7 8 9</pre>
-
-<pre class = 'prettyprint lang-r'>mat = matrix(n, nrow = 3)
-mat</pre>
+<pre class = 'prettyprint lang-r'>ar = array(1:27, c(3,3,3))
+ar[,,1]</pre>
 
 <pre >##      [,1] [,2] [,3]
 ## [1,]    1    4    7
 ## [2,]    2    5    8
 ## [3,]    3    6    9</pre>
 
-</article></slide><slide class=''><hgroup><h2>Matrix (and Data frame) Functions</h2></hgroup><article  id="matrix-and-data-frame-functions">
+<pre class = 'prettyprint lang-r'>ar[,1,]</pre>
 
-<p>These are in addition to the previous useful vector functions:</p>
+<pre >##      [,1] [,2] [,3]
+## [1,]    1   10   19
+## [2,]    2   11   20
+## [3,]    3   12   21</pre>
 
-<ul>
-<li><code>nrow()</code> displays the number of rows of a matrix or data frame</li>
-<li><code>ncol()</code> displays the number of columns</li>
-<li><code>dim()</code> displays a vector of length 2: # rows, # columns</li>
-<li><code>colnames()</code> displays the column names (if any) and <code>rownames()</code> displays the row names (if any)</li>
-</ul>
+</article></slide><slide class=''><hgroup><h2>Splitting Data Frames</h2></hgroup><article  id="splitting-data-frames">
 
-</article></slide><slide class=''><hgroup><h2>Data Selection</h2></hgroup><article  id="data-selection">
+<p>The <code>split()</code> function is useful for splitting <code>data.frame</code>s</p>
 
-<p>Matrices have two &quot;slots&quot; you can use to select data, which represent rows and columns, that are separated by a comma, so the syntax is <code>matrix[row,column]</code>. Note you cannot use <code>dplyr</code> functions on matrices.</p>
+<p>&quot;<code>split</code> divides the data in the vector x into the groups defined by <code>f</code>. The replacement forms replace values corresponding to such a division. <code>unsplit</code> reverses the effect of split.&quot;</p>
 
-<pre class = 'prettyprint lang-r'>mat[1, 1] # individual entry: row 1, column 1</pre>
+<pre class = 'prettyprint lang-r'>&gt; dayList = split(circ,circ$day)</pre>
 
-<pre >## [1] 1</pre>
+</article></slide><slide class=''><hgroup><h2>Splitting Data Frames</h2></hgroup><article  id="splitting-data-frames-1" class="smaller">
 
-<pre class = 'prettyprint lang-r'>mat[1, ] # first row</pre>
+<p>Here is a good chance to introduce <code>lapply</code>, which performs a function within each list element:</p>
 
-<pre >## [1] 1 4 7</pre>
+<p><code>r   &gt; # head(dayList)   &gt; lapply(dayList, head, n=2)</code></p>
 
-<pre class = 'prettyprint lang-r'>mat[, 1] # first columns</pre>
+<p>``` $Friday day date orangeBoardings orangeAlightings orangeAverage 5 Friday 01/15/2010 1645 1643 1644.0 12 Friday 01/22/2010 1401 1388 1394.5 purpleBoardings purpleAlightings purpleAverage greenBoardings 5 NA NA NA NA 12 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 5 NA NA NA NA 12 NA NA NA NA bannerAverage daily 5 NA 1644.0 12 NA 1394.5</p>
 
-<pre >## [1] 1 2 3</pre>
+<p>$Monday day date orangeBoardings orangeAlightings orangeAverage 1 Monday 01/11/2010 877 1027 952.0 8 Monday 01/18/2010 999 1000 999.5 purpleBoardings purpleAlightings purpleAverage greenBoardings 1 NA NA NA NA 8 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 1 NA NA NA NA 8 NA NA NA NA bannerAverage daily 1 NA 952.0 8 NA 999.5</p>
 
-</article></slide><slide class=''><hgroup><h2>Data Selection</h2></hgroup><article  id="data-selection-1">
+<p>$Saturday day date orangeBoardings orangeAlightings orangeAverage 6 Saturday 01/16/2010 1457 1524 1490.5 13 Saturday 01/23/2010 1202 1210 1206.0 purpleBoardings purpleAlightings purpleAverage greenBoardings 6 NA NA NA NA 13 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 6 NA NA NA NA 13 NA NA NA NA bannerAverage daily 6 NA 1490.5 13 NA 1206.0</p>
 
-<p>Note that the class of the returned object is no longer a matrix</p>
+<p>$Sunday day date orangeBoardings orangeAlightings orangeAverage 7 Sunday 01/17/2010 839 938 888.5 14 Sunday 01/24/2010 715 711 713.0 purpleBoardings purpleAlightings purpleAverage greenBoardings 7 NA NA NA NA 14 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 7 NA NA NA NA 14 NA NA NA NA bannerAverage daily 7 NA 888.5 14 NA 713.0</p>
 
-<pre class = 'prettyprint lang-r'>class(mat[1, ])</pre>
+<p>$Thursday day date orangeBoardings orangeAlightings orangeAverage 4 Thursday 01/14/2010 1194 1233 1213.5 11 Thursday 01/21/2010 1303 1307 1305.0 purpleBoardings purpleAlightings purpleAverage greenBoardings 4 NA NA NA NA 11 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 4 NA NA NA NA 11 NA NA NA NA bannerAverage daily 4 NA 1213.5 11 NA 1305.0</p>
 
-<pre >## [1] &quot;integer&quot;</pre>
+<p>$Tuesday day date orangeBoardings orangeAlightings orangeAverage 2 Tuesday 01/12/2010 777 815 796 9 Tuesday 01/19/2010 1023 1047 1035 purpleBoardings purpleAlightings purpleAverage greenBoardings 2 NA NA NA NA 9 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 2 NA NA NA NA 9 NA NA NA NA bannerAverage daily 2 NA 796 9 NA 1035</p>
 
-<pre class = 'prettyprint lang-r'>class(mat[, 1])</pre>
+<p>$Wednesday day date orangeBoardings orangeAlightings orangeAverage 3 Wednesday 01/13/2010 1203 1220 1211.5 10 Wednesday 01/20/2010 1375 1416 1395.5 purpleBoardings purpleAlightings purpleAverage greenBoardings 3 NA NA NA NA 10 NA NA NA NA greenAlightings greenAverage bannerBoardings bannerAlightings 3 NA NA NA NA 10 NA NA NA NA bannerAverage daily 3 NA 1211.5 10 NA 1395.5 ```</p>
 
-<pre >## [1] &quot;integer&quot;</pre>
+</article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
-</article></slide><slide class=''><hgroup><h2>Data Frames</h2></hgroup><article  id="data-frames">
+<p><code>r   &gt; # head(dayList)   &gt; lapply(dayList, dim)</code></p>
 
-<p>To review, the <code>data.frame</code> is the other two dimensional variable class.</p>
+<p>``` $Friday [1] 164 15</p>
 
-<p>Again, data frames are like matrices, but each column is a vector that can have its own class. So some columns might be <code>character</code> and others might be <code>numeric</code>, while others maybe a <code>factor</code>.</p>
+<p>$Monday [1] 164 15</p>
 
-</article></slide><slide class=''><hgroup><h2>Lists</h2></hgroup><article  id="lists">
+<p>$Saturday [1] 163 15</p>
 
-<ul>
-<li>One other data type that is the most generic are <code>lists</code>.</li>
-<li>Can be created using list()</li>
-<li>Can hold vectors, strings, matrices, models, list of other list, lists upon lists!</li>
-<li>Can reference data using $ (if the elements are named), or using [], or [[]]</li>
-</ul>
+<p>$Sunday [1] 163 15</p>
 
-<pre class = 'prettyprint lang-r'>&gt; mylist &lt;- list(letters=c(&quot;A&quot;, &quot;b&quot;, &quot;c&quot;), 
-+         numbers=1:3, matrix(1:25, ncol=5))</pre>
+<p>$Thursday [1] 164 15</p>
 
-</article></slide><slide class=''><hgroup><h2>List Structure</h2></hgroup><article  id="list-structure">
+<p>$Tuesday [1] 164 15</p>
 
-<pre class = 'prettyprint lang-r'>&gt; head(mylist)</pre>
-
-<pre >$letters
-[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;
-
-$numbers
-[1] 1 2 3
-
-[[3]]
-     [,1] [,2] [,3] [,4] [,5]
-[1,]    1    6   11   16   21
-[2,]    2    7   12   17   22
-[3,]    3    8   13   18   23
-[4,]    4    9   14   19   24
-[5,]    5   10   15   20   25</pre>
-
-</article></slide><slide class=''><hgroup><h2>List referencing</h2></hgroup><article  id="list-referencing">
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[1] # returns a list</pre>
-
-<pre >$letters
-[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[&quot;letters&quot;] # returns a list</pre>
-
-<pre >$letters
-[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>List referencing</h2></hgroup><article  id="list-referencing-1">
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[[1]] # returns the vector &#39;letters&#39;</pre>
-
-<pre >[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist$letters # returns vector</pre>
-
-<pre >[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[[&quot;letters&quot;]] # returns the vector &#39;letters&#39;</pre>
-
-<pre >[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>List referencing</h2></hgroup><article  id="list-referencing-2">
-
-<p>You can also select multiple lists with the single brackets.</p>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[1:2] # returns a list</pre>
-
-<pre >$letters
-[1] &quot;A&quot; &quot;b&quot; &quot;c&quot;
-
-$numbers
-[1] 1 2 3</pre>
-
-</article></slide><slide class=''><hgroup><h2>List referencing</h2></hgroup><article  id="list-referencing-3">
-
-<p>You can also select down several levels of a list at once</p>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist$letters[1]</pre>
-
-<pre >[1] &quot;A&quot;</pre>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[[2]][1]</pre>
-
-<pre >[1] 1</pre>
-
-<pre class = 'prettyprint lang-r'>&gt; mylist[[3]][1:2,1:2]</pre>
-
-<pre >     [,1] [,2]
-[1,]    1    6
-[2,]    2    7</pre></article></slide>
+<p>$Wednesday [1] 164 15 ```</p></article></slide>
 
 
   <slide class="backdrop"></slide>
