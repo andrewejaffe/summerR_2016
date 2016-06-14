@@ -40,7 +40,7 @@ prop.table(tab)
 prop.table(tab,1)
 
 ## ----readSal-------------------------------------------------------------
-Sal = read.csv("http://www.aejaffe.com/winterR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
+Sal = read.csv("http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
                as.is = TRUE)
 
 ## ----isna----------------------------------------------------------------

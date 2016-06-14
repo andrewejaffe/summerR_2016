@@ -1,11 +1,11 @@
 ---
 title: "Data Summarization"
 author: "Andrew Jaffe"
-date: "June 14, 2016"
+date: "June 15, 2016"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+  beamer_presentation: default
 ---
 
 ## Data Summarization

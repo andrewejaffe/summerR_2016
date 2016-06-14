@@ -1,6 +1,6 @@
 ####################
 # Data Summarization - Lab
-# 6/14/2016
+# 6/15/2016
 ####################
 
 # Bike Lanes Dataset: BikeBaltimore is the Department of Transportation's bike program. 
@@ -9,7 +9,7 @@
 # Note its also available at: 
 #	http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv
 
-bike = read.csv("http://www.aejaffe.com/winterR_2016/data/Bike_Lanes.csv",
+bike = read.csv("http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv",
 	as.is=TRUE, na.strings=" ")
 bike$type[bike$type==" "] = NA # OR do this
 

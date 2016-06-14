@@ -1,10 +1,10 @@
 #################
 # Data Cleaning and Plotting
 ##############
-# 6/17/2015
+# 6/15/2016
 
 ## Download the "Real Property Taxes" Data from my website (via OpenBaltimore):
-# www.aejaffe.com/winterR_2016/data/real_property_tax.csv.gz
+# www.aejaffe.com/summerR_2016/data/real_property_tax.csv.gz
 ## note you don't need to unzip it to read it into R
 
 # 1. Read the Property Tax data into R and call it the variable `tax`
@@ -45,7 +45,7 @@
 ################################
 ## Read in the Salary FY2015 dataset
 
-# www.aejaffe.com/winterR_2016/data/Baltimore_City_Employee_Salaries_FY2015.csv
+# www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2015.csv
 
 # 10. Make an object called health.sal using the salaries data set, 
 #		with only agencies of those with "fire" (or any forms), if any, in the name
