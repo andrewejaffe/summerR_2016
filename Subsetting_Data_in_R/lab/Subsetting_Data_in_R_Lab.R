@@ -30,3 +30,8 @@
 # 7. Convert the column names of `carsSub` to all upper case
 
 # 8. Re-order the rows of `carsSub` by weight in increasing order
+
+# 9. Copy mtcars into a variable called cars and rename mpg in cars to MPG
+
+# 10. Subset the columns from mtcars that end in "p" and call it pvars
+
