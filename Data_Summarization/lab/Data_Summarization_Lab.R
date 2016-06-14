@@ -1,13 +1,13 @@
 ####################
 # Data Summarization - Lab
-# 1/5/2016
+# 6/14/2016
 ####################
 
 # Bike Lanes Dataset: BikeBaltimore is the Department of Transportation's bike program. 
 # https://data.baltimorecity.gov/Transportation/Bike-Lanes/xzfj-gyms
 # 	Download as a CSV (like the Monuments dataset) in your current working directory
 # Note its also available at: 
-#	http://www.aejaffe.com/winterR_2016/data/Bike_Lanes.csv
+#	http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv
 
 # 1. How many bike "lanes" are currently in Baltimore? 
 #		You can assume each observation/row is a different bike "lane"
