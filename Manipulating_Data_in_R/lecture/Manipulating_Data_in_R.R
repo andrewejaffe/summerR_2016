@@ -3,7 +3,7 @@ library(knitr)
 opts_chunk$set(comment = "")
 
 ## ------------------------------------------------------------------------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
 head(circ, 2)
 
 ## ---- message= FALSE-----------------------------------------------------
@@ -119,12 +119,6 @@ tail(rj)
 fj = full_join(base, visits)
 dim(fj)
 tail(fj)
-
-## ------------------------------------------------------------------------
-args(tapply)
-
-## ------------------------------------------------------------------------
-tapply(wide$Average, wide$line, mean, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
 gb = group_by(wide, line)
