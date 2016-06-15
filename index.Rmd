@@ -7,7 +7,7 @@ output:
 Summer R 2016
 =============
 
-<a href="http://www.jhsph.edu/"><img alt = "JHSPH" align="right" src="http://www.aejaffe.com/media/jhu-bloomberg-logo.jpg" width=295 height=172/></a>
+<a href="http://www.jhsph.edu/"><img alt = "JHSPH" align="right" src="http://www.aejaffe.com/media/jhu-bloomberg-logo.jpg" width=200 height=120/></a>
 
 ### Instructors: 
 
