@@ -11,7 +11,7 @@ opts_chunk$set(echo = TRUE,
 set.seed(3) 
 
 ## ----plotEx,  fig.align='center',cache=FALSE-----------------------------
-death = read.csv("http://www.aejaffe.com/winterR_2016/data/indicatordeadkids35.csv",
+death = read.csv("http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv",
                  as.is=TRUE,header=TRUE, row.names=1)
 death[1:2, 1:5]
 
@@ -63,7 +63,7 @@ scatter.smooth(as.numeric(death["United Kingdom",])~year,span=0.2,
 
 ## ----barplot2, fig.align='center', cache=TRUE----------------------------
 ## Stacked Bar Charts
-cars = read.csv("http://biostat.jhsph.edu/~ajaffe/files/kaggleCarAuction.csv",as.is=T)
+cars = read.csv("http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.csv",as.is=TRUE)
 counts <- table(cars$IsBadBuy, cars$VehicleAge)
 barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
@@ -121,7 +121,7 @@ legend("topleft", paste("Diet",levels(ChickWeight$Diet)),
        lwd = 3, ncol = 2)
 
 ## ----circ, comment="",prompt=TRUE, fig.align='center', cache=FALSE-------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
             header=TRUE,as.is=TRUE)
 palette(brewer.pal(7,"Dark2"))
 dd = factor(circ$day)
