@@ -1,22 +1,18 @@
 #################
 # Data Cleaning and Plotting
 ##############
-# 1/6/2016
+# 6/15/2016
 
 ## Download the "Real Property Taxes" Data from my website (via OpenBaltimore):
-# www.aejaffe.com/winterR_2016/data/real_property_tax.csv.gz
+# www.aejaffe.com/summerR_2016/data/real_property_tax.csv.gz
 ## note you don't need to unzip it to read it into R
 rm( list = ls() ) # clear the workspace
 library(stringr)
 library(dplyr)
 
 # 1. Read the Property Tax data into R and call it the variable `tax`
-tax = read.csv(
-  "~/Downloads/real_property_tax.csv.gz", 
+tax = read.csv( "~/GitHub/summerR_2016/data/real_property_tax.csv.gz", 
                stringsAsFactors = FALSE)
-tax_fac = read.csv(
-  "~/Downloads/real_property_tax.csv.gz", 
-  stringsAsFactors = TRUE)
 
 # 2. How many addresses pay property taxes? 
 nrow(tax)
@@ -24,7 +20,6 @@ dim(tax)
 
 # 3. What is the total city and state tax paid?
 head(tax$cityTax)
-head(tax_fac$cityTax)
 cityTax = tax$cityTax %>% 
   str_replace(fixed("$"), "") %>%
   as.numeric
@@ -51,12 +46,8 @@ head(tax$propertyAddress)
 tax$propertyAddress = str_trim(tax$propertyAddress)
 head(tax$propertyAddress)
 
-tax$street = str_detect(
-  tax$propertyAddress,
-                        "ST$")
-tax$street = str_detect(
-  tax$propertyAddress,
-  "STREET$") | tax$street
+tax$street = str_detect( tax$propertyAddress,   "ST$")
+tax$street = str_detect( tax$propertyAddress, "STREET$") | tax$street
 
 ss = str_split(tax$propertyAddress," ")
 tab = table(sapply(ss, last))
@@ -134,18 +125,18 @@ ft = gsub("`","1",ft,fixed=TRUE)
 # wrapper for string split and sapply
 ss = function(x, pattern, slot=1,...) sapply(strsplit(x,pattern,...), "[", slot)
 
-width = ss(ft,"X", 1)
-length = ss(ft,"X", 2)
+width = sapply(str_split(ft,"X"), first)
+length = sapply(str_split(ft,"X"), nth, 2) 
 
 ## width
-widthFeet = as.numeric(ss(width, "-"))
-widthInch = as.numeric(ss(width, "-",2))/12
+widthFeet = as.numeric(sapply(str_split(width, "-"), first))
+widthInch = as.numeric(sapply(str_split(width, "-"),nth,2))/12
 widthInch[is.na(widthInch)] = 0 # when no inches present
 totalWidth = widthFeet + widthInch # add together
 
 # length
-lengthFeet = as.numeric(ss(length, "-"))
-lengthInch = as.numeric(ss(length, "-",2))/12
+lengthFeet = as.numeric(sapply(str_split(length, "-"),first))
+lengthInch = as.numeric(sapply(str_split(length, "-",2),nth,2))/12
 lengthInch[is.na(lengthInch)] = 0 # when no inches present
 totalLength = lengthFeet + lengthInch
 
@@ -160,7 +151,8 @@ mean(!is.na(tax$sqft))
 sIndex=c(grep("FT", tax$lotSize), 
          grep("S.*F.", tax$lotSize))
 sf = tax$lotSize[sIndex] # subset temporary variable
-sqft2 = as.numeric(ss(sf,"|SQ",1))
+sqft2 = sapply(strsplit(sf,"( |SQ|SF)"),first)
+sqft2 = as.numeric(gsub(",", ".", sqft2)) # remove , and convert
 tax$sqft[sIndex] = sqft2
 table(is.na(tax$sqft)) 
 ## progress!

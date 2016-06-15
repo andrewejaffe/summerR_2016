@@ -1,12 +1,12 @@
 ####################
 # 140.886: Intro to R
 # Homework 3
-# Assigned Date: 1/7/2016
-# Due Date: 1/9/2016
+# Assigned Date: 6/14/2016
+# Due Date: 6/16/2016 by 8:30am
 
 # Instructions: 
 # A)	Use this dataset on infant mortality for the following questions:
-# http://www.aejaffe.com/winterR_2016/data/indicatordeadkids35.csv
+# http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv
 
 # B) Use Knitr to write up this homework. 
 
@@ -19,7 +19,7 @@
 #			Show [1:5,1:5] of this transposed data frame. 
 
 # 3.	Read in this the tab-delim file:
-#		http://www.aejaffe.com/winterR_2016/data/country_pop.txt
+#		http://www.aejaffe.com/summerR_2016/data/country_pop.txt
 #		which contains population information on each country
 
 # 4.	Determine the population of each country in our dataset, 

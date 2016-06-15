@@ -40,7 +40,7 @@ prop.table(tab)
 prop.table(tab,1)
 
 ## ----readSal-------------------------------------------------------------
-Sal = read.csv("http://www.aejaffe.com/winterR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
+Sal = read.csv("http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
                as.is = TRUE)
 
 ## ----isna----------------------------------------------------------------
@@ -50,18 +50,6 @@ any(is.na(Sal$Name)) # are there any NAs?
 ## ---- eval = FALSE-------------------------------------------------------
 ## data$gender[data$gender %in%
 ##     c("Male", "M", "m")] <- "Male"
-
-## ------------------------------------------------------------------------
-library(car, quietly = TRUE)
-x = rep(c("Male", "M", "m", "f", "Female", "female" ), 
-        each = 3)
-car::recode(x, "c('m', 'M', 'male') = 'Male';
-            c('f', 'F', 'female') = 'Female';")
-
-## ------------------------------------------------------------------------
-library(plyr)
-plyr::revalue(x, c("M" = "Male", "m" = "Male",
-                   "f" = "Female", "female" = "Female"))
 
 ## ----gender, echo=FALSE--------------------------------------------------
 set.seed(4) # random sample below - make sure same every time

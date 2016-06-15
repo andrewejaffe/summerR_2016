@@ -16,7 +16,7 @@ mean(x,na.rm=TRUE)
 quantile(x,na.rm=TRUE)
 
 ## ------------------------------------------------------------------------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
             header=TRUE,as.is=TRUE)
 
 ## ------------------------------------------------------------------------
