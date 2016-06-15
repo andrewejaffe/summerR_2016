@@ -65,7 +65,6 @@ Each missing data type has a function that returns `TRUE` if the data is missing
 * `NaN` - `is.nan`
 * `Inf` and `-Inf` - `is.infinite`
 * `is.finite` returns `FALSE` for all missing data and `TRUE` for non-missing
-* `complete.cases` on a `data.frame`/`matrix` returns `TRUE` if all values in that row of the object are not missing.
 
 ## Missing Data with Logicals
 
