@@ -29,7 +29,21 @@ In general, data cleaning is a process of investigating your data for inaccuraci
 
 MOST IMPORTANT RULE - LOOK AT YOUR DATA!
 
-Again - `table`, `summarize`, `is.na`, `any`, `all` are useful.
+## Useful checking functions
+
+- `is.na` - is `TRUE` if the data is `FALSE` otherwise
+- `!` - negation (NOT) 
+    - if `is.na(x)` is `TRUE`, then `!is.na(x)` is `FALSE`
+
+- `all` takes in a `logical` and will be `TRUE` if ALL are `TRUE`
+    - `all(!is.na(x))` - are all values of `x` NOT NA
+- `any` will be `TRUE` if ANY are true
+    - `any(is.na(x))` - do we have any `NA`'s in `x`?
+- `complete.cases` - returns `TRUE` if EVERY value of a row is NOT `NA`
+    - very stringent condition 
+    - `FALSE` missing one value (even if not important)
+ 
+
 
 
 # Dealing with Missing Data
@@ -74,13 +88,23 @@ x > 2 & !is.na(x)
 
 ## Missing Data with Logicals
 
-What about seeing if a value is equal to multiple values?  You can do `(x == 1 | x == 2) & !is.na(x)`, but that is not efficient.  Introduce the `%in%` operator:
+What about seeing if a value is equal to multiple values?  You can do `(x == 1 | x == 2) & !is.na(x)`, but that is not efficient.  
 
 ```{r}
 (x == 0 | x == 2) # has NA
 (x == 0 | x == 2) & !is.na(x) # No NA
+```
+
+what to do?
+
+## Missing Data with Logicals: `%in%`
+
+Introduce the `%in%` operator:
+```{r}
 x %in% c(0, 2) # NEVER has NA and returns logical
 ```
+
+reads "return `TRUE` if `x` is in 0 or 2". (Like `inlist` in Stata).
 
 ## Missing Data with Operations
 
@@ -92,6 +116,15 @@ x * 2
 ```
  
 # Tables and Tabulations
+
+## Useful checking functions
+
+- `unique` - gives you the unique values of a variable
+- `table(x)` - will give a one-way table of `x`
+    - `table(x, useNA = "ifany")` - will have row NA 
+- `table(x, y)` - will give a cross-tab of `x` and `y`
+
+
 
 ## Creating One-way Tables {.smaller}
 
