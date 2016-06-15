@@ -3,48 +3,71 @@ library(knitr)
 opts_chunk$set(comment = "")
 
 ## ------------------------------------------------------------------------
-library(dplyr)
-library(tidyr)
+circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
+head(circ, 2)
 
-## ------------------------------------------------------------------------
-ex_data = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
-head(ex_data, 2)
-
-## ------------------------------------------------------------------------
+## ---- message= FALSE-----------------------------------------------------
 library(lubridate) # great for dates!
-ex_data = mutate(ex_data, date = mdy(date))
-nrow(ex_data[ is.na(ex_data$date), ])
-head(ex_data$date)
-class(ex_data$date)
+library(dplyr) # mutate/summarise functions
+circ = mutate(circ, date = mdy(date))
+sum( is.na(circ$date) ) # all converted correctly
+head(circ$date)
+class(circ$date)
 
 ## ------------------------------------------------------------------------
 library(stringr)
-cn = colnames(ex_data)
+cn = colnames(circ)
 cn = cn %>% 
   str_replace("Board", ".Board") %>% 
   str_replace("Alight", ".Alight") %>% 
   str_replace("Average", ".Average") 
-colnames(ex_data) = cn
+colnames(circ) = cn
+cn
 
 ## ------------------------------------------------------------------------
-ex_data$daily = NULL
+circ$daily = NULL
+
+## ---- echo = FALSE-------------------------------------------------------
+ex_wide = data.frame(id = 1:2,
+                     visit1 = c(10, 5),
+                     visit2 = c(4, 6),
+                     visit3 = c(3, NA)
+                     )
+ex_long = data.frame(id = c(rep(1, 3), rep(2, 2)),
+                     visit = c(1:3, 1:2),
+                     value = c(10, 4, 3, 5, 6))
+
+## ---- echo = FALSE-------------------------------------------------------
+ex_wide
+
+## ---- echo = FALSE-------------------------------------------------------
+ex_long
 
 ## ------------------------------------------------------------------------
-long = gather(ex_data, "var", "number", 
+library(tidyr)
+long = gather(circ, key = "var", value = "number", 
               starts_with("orange"),
               starts_with("purple"), 
               starts_with("green"),
               starts_with("banner"))
-head(long)
+head(long, 2)
 table(long$var)
 
 ## ------------------------------------------------------------------------
 long = separate_(long, "var", 
                  into = c("line", "type"), 
                  sep = "[.]")
-head(long)
-table(long$line)
-table(long$type)
+head(long, 3)
+unique(long$line)
+unique(long$type)
+
+## ------------------------------------------------------------------------
+long = long %>% filter(!is.na(number) & number > 0)
+first_and_last = long %>% arrange(date) %>% # arrange by date
+  filter(type %in% "Boardings") %>% # keep boardings only
+  group_by(line) %>% # group by line
+  slice( c(1, n())) # select ("slice") first and last (n() command) lines
+first_and_last %>%  head(4)
 
 ## ------------------------------------------------------------------------
 # have to remove missing days
@@ -101,16 +124,11 @@ tail(fj)
 args(tapply)
 
 ## ------------------------------------------------------------------------
-rest = tapply(wide$Average, wide$line, mean, na.rm = TRUE)
+tapply(wide$Average, wide$line, mean, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
 gb = group_by(wide, line)
-ress = summarize(gb, mean_avg = mean(Average))
-
-ss = wide %>% 
-    group_by(line) %>% 
-    summarize(mean_boarding = mean(Boardings, na.rm = TRUE),
-              mean_alight = mean(Alightings, na.rm = TRUE))
+summarize(gb, mean_avg = mean(Average))
 
 ## ------------------------------------------------------------------------
 wide %>% 
@@ -120,16 +138,9 @@ wide %>%
 ## ------------------------------------------------------------------------
 wide = wide %>% mutate(year = year(date),
                        month = month(date))
-ss = wide %>% 
+wide %>% 
   group_by(line, year) %>%
-  summarise(
-    mean_boardings = mean(Boardings, na.rm = TRUE),
-    num_na = sum(is.na(Boardings)))
-
-
-all_years = expand.grid(
-  line = c("banner", "green"),  
-  year = 2010:2015)
+  summarise(mean_avg = mean(Average))
 
 ## ------------------------------------------------------------------------
 library(ggplot2)
@@ -153,4 +164,20 @@ ggplot(aes(x = mid_month,
 ggplot(aes(x = date, y = Average, colour = line), 
            data = wide) + geom_smooth(se = FALSE) + 
   geom_point(size = .5)
+
+## ------------------------------------------------------------------------
+bike = read.csv(
+  "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv",
+  as.is = TRUE)
+
+## ---- message = FALSE----------------------------------------------------
+bike %>% 
+  group_by(project) %>% 
+  summarise(mean(length)) # get the average length
+
+## ---- message = FALSE----------------------------------------------------
+bike %>% 
+  group_by(project) %>% 
+  summarize(mean_length = mean(length)) %>% 
+  head(4) # head ONLY for slide printing
 
