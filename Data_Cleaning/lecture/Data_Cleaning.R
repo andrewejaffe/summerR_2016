@@ -51,18 +51,6 @@ any(is.na(Sal$Name)) # are there any NAs?
 ## data$gender[data$gender %in%
 ##     c("Male", "M", "m")] <- "Male"
 
-## ------------------------------------------------------------------------
-library(car, quietly = TRUE)
-x = rep(c("Male", "M", "m", "f", "Female", "female" ), 
-        each = 3)
-car::recode(x, "c('m', 'M', 'male') = 'Male';
-            c('f', 'F', 'female') = 'Female';")
-
-## ------------------------------------------------------------------------
-library(plyr)
-plyr::revalue(x, c("M" = "Male", "m" = "Male",
-                   "f" = "Female", "female" = "Female"))
-
 ## ----gender, echo=FALSE--------------------------------------------------
 set.seed(4) # random sample below - make sure same every time
 gender <- sample(c("Male", "mAle", "MaLe", "M", "MALE", "Ma", "FeMAle", "F", "Woman", "Man", "Fm", "FEMALE"), 1000, replace = TRUE)

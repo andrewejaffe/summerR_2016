@@ -3,9 +3,9 @@ title: "Data Cleaning"
 author: "Andrew Jaffe"
 date: "June 15, 2016"
 output:
+  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
-  beamer_presentation: default
 ---
 
 
@@ -170,28 +170,6 @@ In R, you can simply do something like:
 ```{r, eval = FALSE}
 data$gender[data$gender %in% 
     c("Male", "M", "m")] <- "Male"
-```
-
-## Example of Recoding with `recode`: `car` package
-
-You can also `recode` a vector:
-
-```{r}
-library(car, quietly = TRUE)
-x = rep(c("Male", "M", "m", "f", "Female", "female" ), 
-        each = 3)
-car::recode(x, "c('m', 'M', 'male') = 'Male';
-            c('f', 'F', 'female') = 'Female';")
-```
-
-## Example of Recoding with `revalue`: `plyr`
-
-You can also `revalue` a vector with the `revalue` command
-
-```{r}
-library(plyr)
-plyr::revalue(x, c("M" = "Male", "m" = "Male",
-                   "f" = "Female", "female" = "Female"))
 ```
 
 ## Example of Cleaning: more complicated

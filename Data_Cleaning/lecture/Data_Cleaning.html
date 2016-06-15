@@ -304,32 +304,6 @@ x &gt; 2</pre>
 <pre class = 'prettyprint lang-r'>data$gender[data$gender %in% 
     c(&quot;Male&quot;, &quot;M&quot;, &quot;m&quot;)] &lt;- &quot;Male&quot;</pre>
 
-</article></slide><slide class=''><hgroup><h2>Example of Recoding with <code>recode</code>: <code>car</code> package</h2></hgroup><article  id="example-of-recoding-with-recode-car-package">
-
-<p>You can also <code>recode</code> a vector:</p>
-
-<pre class = 'prettyprint lang-r'>library(car, quietly = TRUE)
-x = rep(c(&quot;Male&quot;, &quot;M&quot;, &quot;m&quot;, &quot;f&quot;, &quot;Female&quot;, &quot;female&quot; ), 
-        each = 3)
-car::recode(x, &quot;c(&#39;m&#39;, &#39;M&#39;, &#39;male&#39;) = &#39;Male&#39;;
-            c(&#39;f&#39;, &#39;F&#39;, &#39;female&#39;) = &#39;Female&#39;;&quot;)</pre>
-
-<pre > [1] &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;  
- [8] &quot;Male&quot;   &quot;Male&quot;   &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot;
-[15] &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Example of Recoding with <code>revalue</code>: <code>plyr</code></h2></hgroup><article  id="example-of-recoding-with-revalue-plyr">
-
-<p>You can also <code>revalue</code> a vector with the <code>revalue</code> command</p>
-
-<pre class = 'prettyprint lang-r'>library(plyr)
-plyr::revalue(x, c(&quot;M&quot; = &quot;Male&quot;, &quot;m&quot; = &quot;Male&quot;,
-                   &quot;f&quot; = &quot;Female&quot;, &quot;female&quot; = &quot;Female&quot;))</pre>
-
-<pre > [1] &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;   &quot;Male&quot;  
- [8] &quot;Male&quot;   &quot;Male&quot;   &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot;
-[15] &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot;</pre>
-
 </article></slide><slide class=''><hgroup><h2>Example of Cleaning: more complicated</h2></hgroup><article  id="example-of-cleaning-more-complicated">
 
 <p>Sometimes though, it&#39;s not so simple. That&#39;s where functions that find patterns come in very useful.</p>
