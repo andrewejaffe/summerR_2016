@@ -3,10 +3,16 @@ title: "Data Summarization"
 author: "Andrew Jaffe"
 date: "June 14, 2016"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+  beamer_presentation: default
 ---
+
+```{r, echo = FALSE, message=FALSE, error = FALSE}
+library(knitr)
+opts_chunk$set(comment = "")
+library(dplyr)
+```
 
 ## Data Summarization
 
@@ -42,6 +48,14 @@ quantile(mtcars$wt, probs = 0.6)
 
 ## Statistical summarization
 
+`t.test` will be covered more in detail later, but can give you 95\% CI:
+
+```{r}
+t.test(mtcars$wt) 
+```
+
+## Statistical summarization
+
 Note that many of these functions have additional inputs regarding missing data, typically requiring the `na.rm` argument. 
 
 ```{r}
@@ -59,7 +73,7 @@ quantile(x,na.rm=TRUE)
     * `rowSums(x)`: takes the sum of each row of x
     * `colSums(x)`: takes the sum of each column of x
     * `summary(x)`: for data frames, displays the quantile information
-    
+
 
 ## Charm City Circulator data
 
@@ -76,16 +90,17 @@ circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_
 
 Let's just take columns that represent average ridership:
 
-```{r}
-library(dplyr,quietly = TRUE)
+```{r, message=FALSE}
+library(dplyr)
 circ2 = select(circ, date, day, ends_with("Average"))
+head(circ2, 4)
 ```
 
 ## column and row means
 
 ```{r colMeans}
 avgs = select(circ2, ends_with("Average"))
-colMeans(avgs,na.rm=TRUE)
+colMeans(avgs,na.rm = TRUE)
 circ2$daily = rowMeans(avgs,na.rm=TRUE)
 head(circ2$daily)
 ```
@@ -144,11 +159,11 @@ Simply put, you can apply function `FUN` to `X` within each categorical level of
 For example, we can estimate the highest average daily ridership for each day of the week in 1 line in the Circulator dataset. 
 
 ```{r tapply1}
-tapply(circ2$daily, circ2$day, max, na.rm=TRUE)
+tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
 ```
     
 
-## Data Summarization
+## Data Summarization/Visualization
 
 * Basic summarization plots
     * `plot(x,y)`: scatterplot of x and y
@@ -170,6 +185,16 @@ plot(mtcars$mpg, mtcars$disp)
 
 ```{r hist1}
 hist(circ2$daily)
+```
+
+## Plot with a line
+
+`type = "l"` means a line
+
+```{r hist_date}
+library(lubridate)
+circ2$date = mdy(circ2$date)
+plot(circ2$date, circ2$daily, type = "l")
 ```
 
 ## Density
@@ -202,6 +227,6 @@ boxplot(daily ~ day, data=circ2)
 ## Matrix plot
 
 ```{r matplot1}
-matplot(avgs)
+pairs(avgs)
 ```
 
