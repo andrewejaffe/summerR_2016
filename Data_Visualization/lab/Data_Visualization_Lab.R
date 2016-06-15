@@ -1,8 +1,8 @@
 ### Data Visualization Lab
-# 1/7/2016
+# 6/16/2016
 
 ## you will need the charm city circulator dataset:
-# circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
+# circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
 #            header=TRUE,as.is=TRUE)
 
 # Using ggplot2:
