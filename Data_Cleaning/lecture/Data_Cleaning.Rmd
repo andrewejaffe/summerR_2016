@@ -3,9 +3,9 @@ title: "Data Cleaning"
 author: "Andrew Jaffe"
 date: "June 15, 2016"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+  beamer_presentation: default
 ---
 
 
@@ -106,6 +106,16 @@ x %in% c(0, 2) # NEVER has NA and returns logical
 
 reads "return `TRUE` if `x` is in 0 or 2". (Like `inlist` in Stata).
 
+## Missing Data with Logicals: `%in%`
+
+NEVER has NA, even if you put it there (BUT DON'T DO THIS):
+
+```{r}
+x %in% c(0, 2, NA) # NEVER has NA and returns logical
+x %in% c(0, 2) | is.na(x)
+```
+
+
 ## Missing Data with Operations
 
 Similarly with logicals, operations/arithmetic with `NA` will result in `NA`s:
@@ -131,10 +141,19 @@ x * 2
 Here we will use `table` to make tabulations of the data.   Look at `?table` to see options for missing data.
 
 ```{r table}
+unique(x)
 table(x)
-table(x, useNA = "ifany")
+table(x, useNA = "ifany") # will not 
 ```
 
+
+## Creating One-way Tables {.smaller}
+
+`useNA = "ifany"` will not have NA in table heading if no `NA`:
+```{r onetab_ifany}
+table(c(0, 1, 2, 3, 2, 3, 3, 2,2, 3), 
+        useNA = "ifany")
+```
 
 ## Creating One-way Tables {.smaller}
 
@@ -142,6 +161,19 @@ You can set `useNA = "always"` to have it always have a column for `NA`
 ```{r onetab}
 table(c(0, 1, 2, 3, 2, 3, 3, 2,2, 3), 
         useNA = "always")
+```
+
+## Tables with Factors {.smaller}
+
+If you use a `factor`, all levels will be given even if no exist! 
+  - (May be wanted or not):
+
+```{r onetab_fact}
+fac = factor(c(0, 1, 2, 3, 2, 3, 3, 2,2, 3),
+             levels = 1:4)
+tab = table(fac)
+tab
+tab[ tab > 0 ]
 ```
 
 ## Creating Two-way Tables {.smaller}
