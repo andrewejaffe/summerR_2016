@@ -38,7 +38,7 @@ Summer R 2016
 | 3  | 2016-06-15 | Module 7 | [HTML](Data_Summarization/lecture/Data_Summarization.html), [PDF](Data_Summarization/lecture/Data_Summarization.pdf), [Code](Data_Summarization/lecture/Data_Summarization.R), [Lab](Data_Summarization/lab/Data_Summarization_Lab.R), [Key](Data_Summarization/lab/Data_Summarization_Lab_Key.R) | Data Summarization |
 | 3  | 2016-06-15 | Module 8  | [HTML](Data_Cleaning/lecture/Data_Cleaning.html), [PDF](Data_Cleaning/lecture/Data_Cleaning.pdf), [Code](Data_Cleaning/lecture/Data_Cleaning.R), [Lab](Data_Cleaning/lab/Data_Cleaning_Lab.R), [Key](Data_Cleaning/lab/Data_Cleaning_Lab_key.R) | Data Cleaning |
 | 4  | 2016-06-16 | Module 9  | [HTML](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html), [PDF](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf), [Code](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.R) | Data Manipulation |
-| 4  | 2016-06-16 | Module 10  | [HTML](Data_Visualization/lecture/Data_Visualization.html), [PDF](Data_Visualization/lecture/Data_Visualization.pdf), [Code](Data_Visualization/lecture/Data_Visualization.R),  [Lab](Data_Visualization/lab/Data_Visualization_Lab.R), <!-- [Key](Data_Visualization/lab/Data_Visualization_Lab_key.R)--> | Data Visualization |
+| 4  | 2016-06-16 | Module 10  | [HTML](Data_Visualization/lecture/Data_Visualization.html), [PDF](Data_Visualization/lecture/Data_Visualization.pdf), [Code](Data_Visualization/lecture/Data_Visualization.R),  [Lab](Data_Visualization/lab/Data_Visualization_Lab.R),  [Key](Data_Visualization/lab/Data_Visualization_Lab_key.R) | Data Visualization |
 
 <!--
 |---|---|---|---|---|

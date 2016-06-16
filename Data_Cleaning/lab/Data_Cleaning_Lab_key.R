@@ -44,7 +44,7 @@ sum(tax$cityTax, na.rm = TRUE)/1e6
 sum(tax$stateTax, na.rm = TRUE)
 sum(tax$stateTax, na.rm = TRUE)/1e6
 
-# 4. What is the 75th percentile of city and state tax paid by ward?
+# 4. What is the 75th percentile of city and state tax paid by address type?
 head(tax$propertyAddress)
 tax$propertyAddress = str_trim(tax$propertyAddress)
 head(tax$propertyAddress)
@@ -56,38 +56,44 @@ ss = str_split(tax$propertyAddress," ")
 tab = table(sapply(ss, last))
 
 # 5. Split the data by ward into a list: 
-tax_list = split(tax, tax$street)
+### tax_list = split(tax, tax$street)
 
 # Using `tapply()` and `table()`
-#	a. how many observations are in each ward?
-sapply(tax_list, nrow)
+#	a. how many observations are in each address type?
+### sapply(tax_list, nrow)
 sum(tax$street)
 table(tax$street)
-tapply(tax$propertyAddress, tax$street, length)
+tapply(tax$propertyAddress, 
+        tax$street, length)
 
-#	b. what is the mean state tax per ward
+#	b. what is the mean state tax per address type?
 tax %>% 
   group_by(street) %>% 
   summarize(mean_state = mean(stateTax, na.rm = TRUE))
+
 tapply(tax$stateTax, tax$street, mean, na.rm=TRUE)
 
-#	c. what is the maximum amount still due?
-
+## 75th percentile
+tapply(tax$stateTax, tax$street,
+       quantile, prob = 0.75, na.rm=TRUE)
+tapply(tax$stateTax, tax$street,
+       quantile, na.rm=TRUE)
 
 # 6. Make boxplots using base graphics showing cityTax 
 #	 	by whether the property	is a principal residence or not.
 tax$resCode = str_trim(tax$resCode)
-boxplot(log(cityTax) ~ resCode, data = tax)
+boxplot(log(cityTax+1) ~ resCode, data = tax)
 # 7. Subset the data to only retain those houses that are principal residences. 
 pres = tax %>% filter( resCode %in% "PRINCIPAL RESIDENCE")
+pres = tax %>% filter( resCode == "PRINCIPAL RESIDENCE")
 #	a) How many such houses are there?
 dim(pres)
 #	b) Describe the distribution of property taxes on these residences.
+hist(log2(pres$cityTax+1))
 
 # 8. Convert the 'lotSize' variable to a numeric square feet variable. 
-#	Tips: - Assume hyphens represent decimal places within measurements. 
-#		  - 1 acre = 43560 square feet
-#		  - The hyphens represent inches (not decimals)
+#	Tips: - 1 acre = 43560 square feet
+#		    - The hyphens represent inches (not decimals)
 # 		  - Don't spend more than 5-10 minutes on this; stop and move on
 
 tax$lotSize = str_trim(tax$lotSize) # trim to be safe
@@ -103,20 +109,30 @@ acre = tax$lotSize[aIndex] # temporary variable
 ## find and replace character strings
 acre = gsub(" ACRE.*","",acre)
 acre = gsub(" %","",acre)
-head(acre[is.na(as.numeric(acre))])
+table(!is.na(as.numeric(acre)))
 
+head(acre[is.na(as.numeric(acre))],50)
+
+## lets clean the rest
 acre = gsub("-",".",acre,fixed=TRUE) # hyphen instead of decimal
 head(acre[is.na(as.numeric(acre))])
+table(!is.na(as.numeric(acre)))
+
 acre = gsub("ACRES","", acre, fixed=TRUE)
 head(acre[is.na(as.numeric(acre))])
 
+# take care of individual mistakes
 acre = gsub("O","0", acre, fixed=TRUE) # 0 vs O
 acre = gsub("Q","", acre, fixed=TRUE) # Q, oops
+acre = gsub(",.",".", acre, fixed=TRUE) # extra ,
+acre = gsub(",","", acre, fixed=TRUE) # extra ,
+acre = gsub("L","0", acre, fixed=TRUE) # leading L
 acre[is.na(as.numeric(acre))]
 
 acre2 = as.numeric(acre)*43560 
-sum(is.na(acre2)) # all but 4
+sum(is.na(acre2)) # all but one
 
+#######################
 ## now square feet:
 fIndex = grep("X", tax$lotSize)
 ft = tax$lotSize[fIndex]
@@ -125,8 +141,10 @@ ft = gsub("&", "-", ft, fixed=TRUE)
 ft = gsub("IMP ONLY ", "", ft, fixed=TRUE)
 ft = gsub("`","1",ft,fixed=TRUE)
 
+ft= sapply(str_split(ft, " "), first)
+
 # wrapper for string split and sapply
-ss = function(x, pattern, slot=1,...) sapply(strsplit(x,pattern,...), "[", slot)
+#### ss = function(x, pattern, slot=1,...) sapply(strsplit(x,pattern,...), "[", slot)
 
 width = sapply(str_split(ft,"X"), first)
 length = sapply(str_split(ft,"X"), nth, 2) 
@@ -144,18 +162,22 @@ lengthInch[is.na(lengthInch)] = 0 # when no inches present
 totalLength = lengthFeet + lengthInch
 
 # combine together for square feet
-sqrtFt = totalWidth*totalLength
+sqrtFt = totalWidth*totalLength 
+ft[is.na(sqrtFt)] # what is left?
 
+### combine together
 tax$sqft = rep(NA)
 tax$sqft[aIndex] = acre2
 tax$sqft[fIndex] = sqrtFt
 mean(!is.na(tax$sqft))
 
+# already in square feet, easy!!
 sIndex=c(grep("FT", tax$lotSize), 
          grep("S.*F.", tax$lotSize))
 sf = tax$lotSize[sIndex] # subset temporary variable
-sqft2 = sapply(strsplit(sf,"( |SQ|SF)"),first)
-sqft2 = as.numeric(gsub(",", ".", sqft2)) # remove , and convert
+
+sqft2 = sapply(str_split(sf,"( |SQ|SF)"),first)
+sqft2 = as.numeric(gsub(",", "", sqft2)) # remove , and convert
 tax$sqft[sIndex] = sqft2
 table(is.na(tax$sqft)) 
 ## progress!
