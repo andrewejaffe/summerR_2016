@@ -1,11 +1,11 @@
 ---
 title: "Statistics"
-author: "Andrew Jaffe, John Muschelli"
-date: "January 8, 2015"
+author: "John Muschelli"
+date: "June 17, 2016"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+  beamer_presentation: default
   slidy_presentation: default
 ---
 
@@ -377,104 +377,3 @@ Also, if you want to only plot a subset of the data (for speed/time or overplott
 samp.cars <- cars[ sample(nrow(cars), 10000), ]
 plot(VehOdo ~ jitter(VehBCost,amount=0.3), data= samp.cars)  
 ```
-
-## By popular demand
-
-* Principal Component Analysis (PCA)
-* Imputation
-
-## PCA
-
-Dimension reduction technique for identifying potentially hidden combinations of observed variables that explain variability in high dimensional data. 
-
-Example from "R-bloggers": http://www.r-bloggers.com/computing-and-visualizing-pca-in-r/
-
-## PCA
-
-```{r}
-data(iris)
-head(iris, 3)
-```
-
-## PCA
-
-```{r}
-# log transform 
-log.ir <- log(iris[, 1:4])
-ir.species <- iris[, 5]
-ir.pca <- prcomp(log.ir, center = TRUE, scale = TRUE) 
-```
-
-Centering - removing the mean - is almost always recommended, otherwise the first PC will represent the mean. Scaling is useful when columns/data are on different scales.
-
-## PCA
-
-So what does this do?
-
-```{r}
-print(ir.pca)
-summary(ir.pca)
-```
-
-## PCA 
-
-```{r}
-plot(ir.pca$x, col = as.numeric(ir.species),pch=19)
-legend("topleft", levels(ir.species), col=1:3, pch=15, nc=3)
-```
-
-## PCA 
-
-```{r}
-# devtools::install_github("ggbiplot", "vqv")
-ggbiplot::ggbiplot(ir.pca, obs.scale = 1, var.scale = 1, 
-    groups = ir.species, ellipse = TRUE, 
-    circle = TRUE) + scale_color_discrete(name = '') +
-    theme(legend.direction = 'horizontal', 
-               legend.position = 'top')
-```
-
-## Multiple Imputation
-
-Sometimes you want to "impute" missing data in a dataset if its missing completely at random (MCAR).
-
-There are several methods for performing imputation in a dataset, but one popular approach is "multiple imputation", which performs several imputation procedures and then takes the average across these runs. 
-Let's take a look at the `mi` package. This is motivated by this guide: http://thomasleeper.com/Rcourse/Tutorials/mi.html
-
-## Multiple Imputation
-
-```{r}
-set.seed(210)
-x = c(sample(1:20, 16, TRUE), rep(NA, 4))
-x
-mean(x, na.rm = TRUE)
-sd(x, na.rm = TRUE)/sqrt(sum(!is.na(x)))
-```
-
-## Multiple Imputation
-
-```{r}
-imp <- replicate(5, c(x[!is.na(x)], 
-    sample(x[!is.na(x)], 4, TRUE)))
-tail(imp)
-colMeans(imp)
-```
-
-## Multiple Imputation
-
-```{r}
-overallMean = mean(colMeans(imp))
-withinVar = mean(apply(imp,2,sd)/sqrt(length(x)))
-betweenVar = sum((colMeans(imp) - overallMean)^2)/(5-1)
-overallSE = sqrt(withinVar + ((1 + (1/5)) * betweenVar))
-
-c(mean(1:20), overallMean, mean(x, na.rm = TRUE))
-c(overallSE, sd(x, na.rm = TRUE)/sqrt(sum(!is.na(x))))
-```
-
-## Multiple Imputation
-
-Let's look at some multivariate examples in the vignette for the `mi` package:
-
-https://cran.r-project.org/web/packages/mi/vignettes/mi_vignette.pdf
-
