@@ -13,6 +13,7 @@ library(dplyr)
 # 1. Read the Property Tax data into R and call it the variable `tax`
 tax = read.csv( "~/GitHub/summerR_2016/data/real_property_tax.csv.gz", 
                stringsAsFactors = FALSE)
+# write.csv(tax, file=gzfile("file.csv.gz"))
 
 # 2. How many addresses pay property taxes? 
 nrow(tax)
@@ -38,16 +39,18 @@ tax$cityTax = cityTax
 tax$stateTax = stateTax
 
 sum(tax$cityTax, na.rm = TRUE)
-sum(tax$stateTax, na.rm = TRUE)
+sum(tax$cityTax, na.rm = TRUE)/1e6
 
+sum(tax$stateTax, na.rm = TRUE)
+sum(tax$stateTax, na.rm = TRUE)/1e6
 
 # 4. What is the 75th percentile of city and state tax paid by ward?
 head(tax$propertyAddress)
 tax$propertyAddress = str_trim(tax$propertyAddress)
 head(tax$propertyAddress)
 
-tax$street = str_detect( tax$propertyAddress,   "ST$")
-tax$street = str_detect( tax$propertyAddress, "STREET$") | tax$street
+tax$street = str_detect(tax$propertyAddress, "ST$")
+tax$street = str_detect(tax$propertyAddress, "STREET$") | tax$street
 
 ss = str_split(tax$propertyAddress," ")
 tab = table(sapply(ss, last))

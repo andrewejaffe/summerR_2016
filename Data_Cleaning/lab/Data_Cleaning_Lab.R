@@ -13,14 +13,12 @@
 
 # 3. What is the total city and state tax paid?
 
-# 4. What is the 75th percentile of city and state tax paid by ward?
+# 4. What is the 75th percentile of city and state tax paid by residence code?
 
-# 5. Split the data by ward into a list: 
+# 5. Using `tapply()` and `table()`
+#	a. how many observations are in each residence code?
 
-# Using `tapply()` and `table()`
-#	a. how many observations are in each ward?
-
-#	b. what is the mean state tax per ward
+#	b. what is the mean state tax per residence code?
 
 #	c. what is the maximum amount still due?
 
