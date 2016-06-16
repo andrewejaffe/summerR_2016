@@ -3,13 +3,15 @@ title: "Knitr"
 author: "John Muschelli"
 date: "June 17, 2016"
 output:
-  pdf_document:
-    toc: yes
   html_document:
+    toc: yes
+  pdf_document:
     toc: yes
 ---
 
-
+```{r}
+library(dplyr)
+```
 The three "back ticks" (\`) must be followed by curly brackets "{", and then "r" to tell the computer that you are using R code.  This line is then closed off by another curly bracket "}". 
 
 Anything before three more back ticks "```" are then considered R code (a script).  
@@ -152,6 +154,7 @@ That's rather UGLY, so let's use a package called `xtable` and then make this mo
 Pander can output tables (as well as other things such as models), so let's print this using the `pander` command from the `pander` package.    So `pander` is really good when you are trying to print out a table (in html, otherwise make the table and use `write.csv` to get it in Excel and then format) really quickly and in a report.  
 
 ```{r}
+# devtools::install_github('Rapporter/pander') # need this version!
 library(pander)
 pander(mod.yr)
 ```
@@ -188,7 +191,7 @@ pander(ptable)
 Let's say we want the beta, the 95% CI.  We can use `confint` on the model, `cbind` it to `ptable` and then paste the columns together (after rounding) with a comma and bound them in parentheses.
 
 ```{r}
-library(tidyr)
+library(dplyr)
 colnames(ptable) = c("Beta", "SE", "t.Statistic", "p.value")
 cint = confint(mod.yr)
 colnames(cint) = c("lower", "upper")
@@ -199,13 +202,32 @@ ptable = ptable %>% mutate(lower = round(lower, 2),
                            p.value = ifelse(p.value < 0.01, "< 0.01", 
                                             round(p.value,2)))
 ptable = ptable %>% mutate(ci = paste0("(", lower, ", ", upper, ")"))
-ptable = select(ptable, Beta, ci, p.value)
+ptable = dplyr::select(ptable, Beta, ci, p.value)
 pander(ptable)
 ```
 
 
 ## Multiple Models 
-OK, that's pretty good, but let's say we have all three models.  Another package called `stargazer` can put models together easily and print them out. But it doesn't work so well with *many* models together.  So let's use stargazer.  Again, you need to use `install.packages("stargazer")` if you don't have function.  
+
+OK, that's pretty good, but let's say we have all three models.  You can't put doesn't work so well with *many* models together. 
+```{r}
+# pander(mod.yr, mod.yrtype) does not work
+# pander(list(mod.yr, mod.yrtype)) # will give 2 separate tables
+```
+
+If we use the `memisc` package, we can combine the models:
+```{r, message = FALSE}
+library(memisc)
+mtab_all <- mtable("Model Year"=mod.yr,"Model Type"=mod.type,"Model Both"=mod.yrtype,
+                    summary.stats = c("sigma","R-squared","F","p","N"))
+write.mtable(mtab_all, file = "my_tab.txt")
+pander(mtab_all)
+```
+                    
+
+
+
+Another package called `stargazer` can put models together easily and print them out.  So let's use stargazer.  Again, you need to use `install.packages("stargazer")` if you don't have function.  
 
 ```{r}
 require(stargazer)
