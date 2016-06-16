@@ -27,7 +27,7 @@ I'm reading in the bike lanes here.
 library(stringr)
 library(plyr)
 library(dplyr)
-fname <- "../../data/Bike_Lanes.csv"
+fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
 bike = read.csv(fname, as.is = TRUE)
 ```
 
