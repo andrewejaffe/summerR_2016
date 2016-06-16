@@ -147,35 +147,74 @@ summary(mod.type)
 
 That's rather UGLY, so let's use a package called `xtable` and then make this model into an `xtable` object and then print it out nicely.  
 
+## Pander
+
+Pander can output tables (as well as other things such as models), so let's print this using the `pander` command from the `pander` package.    So `pander` is really good when you are trying to print out a table (in html, otherwise make the table and use `write.csv` to get it in Excel and then format) really quickly and in a report.  
+
 ```{r}
-### DON'T DO THIS.  YOU SHOULD ALWAYS DO library() statements in the FIRST code chunk.
-### this is just to show you the logic of a report/analysis.
-require(xtable)
-# smod <- summary(mod.yr)
-xtab <- xtable(mod.yr)
+library(pander)
+pander(mod.yr)
 ```
 
-Well `xtable` can make html tables, so let's print this.  We must tell R that the results is actually an html output, so we say the results should be embedded in the html "asis" (aka just print out whatever R spits out).
-```{r, results='asis'}
-print.xtable(xtab, type="html")
+It is the same if we write out the summary, but more information is in the **footer**.
+
+```{r}
+pander(summary(mod.yr))
 ```
 
-```{r, results='asis'}
-library(DT)
-datatable(summary(mod.type)$coef)
+### Formatting
+Let's format the rows and the column names a bit better:
+
+#### Rownames 
+
+```{r}
+ptable = summary(mod.yr)$coef
+ptable = as.data.frame(ptable) # need for dplyr
+rn = rownames(ptable)
+rn = rn %>% str_replace(fixed("factor(dateInstalled)"), "") %>% 
+  str_replace(fixed("(Intercept)"), "Intercept")
+print(rn)
+rownames(ptable) = rn
 ```
 
-OK, that's pretty good, but let's say we have all three models.  Another package called `stargazer` can put models together easily and pritn them out.  So `xtable` is really good when you are trying to print out a table (in html, otherwise make the table and use `write.csv` to get it in Excel and then format) really quickly and in a report.  But it doesn't work so well with *many* models together.  So let's use stargazer.  Again, you need to use `install.packages("stargazer")` if you don't have function.  
+#### Column Names
+Now we can reset the column names. 
+```{r}
+colnames(ptable) = c("Beta", "SE", "t.Statistic", "p.value")
+pander(ptable)
+```
+
+#### Confidence Intervals
+Let's say we want the beta, the 95% CI.  We can use `confint` on the model, `cbind` it to `ptable` and then paste the columns together (after rounding) with a comma and bound them in parentheses.
+
+```{r}
+library(tidyr)
+colnames(ptable) = c("Beta", "SE", "t.Statistic", "p.value")
+cint = confint(mod.yr)
+colnames(cint) = c("lower", "upper")
+ptable = cbind(ptable, cint)
+ptable = ptable %>% mutate(lower = round(lower, 2),
+                           upper = round(lower, 2),
+                           Beta = round(Beta, 2),
+                           p.value = ifelse(p.value < 0.01, "< 0.01", 
+                                            round(p.value,2)))
+ptable = ptable %>% mutate(ci = paste0("(", lower, ", ", upper, ")"))
+ptable = select(ptable, Beta, ci, p.value)
+pander(ptable)
+```
+
+
+## Multiple Models 
+OK, that's pretty good, but let's say we have all three models.  Another package called `stargazer` can put models together easily and print them out. But it doesn't work so well with *many* models together.  So let's use stargazer.  Again, you need to use `install.packages("stargazer")` if you don't have function.  
 
 ```{r}
 require(stargazer)
 ```
 
-
 OK, so what's the difference here?  First off, we said results are "markup", so that it will not try to reformat the output.  Also, I didn't want those # for comments, so I just made comment an empty string "". 
 
 ```{r, results='markup', comment=""}
-stargazer(mod.yr, mod.type, mod.yrtype, type="text")
+stargazer(mod.yr, mod.type, mod.yrtype, type = "text")
 ```
 
 If we use 
@@ -199,8 +238,7 @@ getwd()
 Now I can just say there are `r n2009` lanes in 2009 and `r n2010` in 2010.  
 
 ```{r}
-fname <- "../../data/Charm_City_Circulator_Ridership.csv"
-# fname <- file.path(data.dir, "Charm_City_Circulator_Ridership.csv")
+fname <- "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv"
 ## file.path takes a directory and makes a full name with a full file path
 charm = read.csv(fname, as.is=TRUE)
 
