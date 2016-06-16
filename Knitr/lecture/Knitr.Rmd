@@ -1,7 +1,7 @@
 ---
 title: "Knitr"
 author: "John Muschelli"
-date: "January 5, 2016"
+date: "June 17, 2016"
 output:
   html_document:
     toc: yes
