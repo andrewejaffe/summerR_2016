@@ -1,5 +1,5 @@
 ## ----cor1, comment="",prompt=TRUE----------------------------------------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
            header=TRUE,as.is=TRUE)
 cor(circ$orangeAverage, circ$purpleAverage)
 cor(circ$orangeAverage, circ$purpleAverage, use="complete.obs")
@@ -38,7 +38,7 @@ tt
 names(tt)
 
 ## ----tt2, comment="",prompt=TRUE,cache=TRUE------------------------------
-http_data_dir = "http://www.aejaffe.com/winterR_2016/data/"
+http_data_dir = "http://www.aejaffe.com/summerR_2016/data/"
 cars = read.csv(paste0(http_data_dir, "kaggleCarAuction.csv"),
                 as.is=TRUE)
 tt2 = t.test(VehBCost~IsBadBuy, data=cars)

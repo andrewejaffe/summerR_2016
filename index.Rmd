@@ -39,13 +39,11 @@ Summer R 2016
 | 3  | 2016-06-15 | Module 8  | [HTML](Data_Cleaning/lecture/Data_Cleaning.html), [PDF](Data_Cleaning/lecture/Data_Cleaning.pdf), [Code](Data_Cleaning/lecture/Data_Cleaning.R), [Lab](Data_Cleaning/lab/Data_Cleaning_Lab.R), [Key](Data_Cleaning/lab/Data_Cleaning_Lab_key.R) | Data Cleaning |
 | 4  | 2016-06-16 | Module 9  | [HTML](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html), [PDF](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf), [Code](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.R) | Data Manipulation |
 | 4  | 2016-06-16 | Module 10  | [HTML](Data_Visualization/lecture/Data_Visualization.html), [PDF](Data_Visualization/lecture/Data_Visualization.pdf), [Code](Data_Visualization/lecture/Data_Visualization.R),  [Lab](Data_Visualization/lab/Data_Visualization_Lab.R),  [Key](Data_Visualization/lab/Data_Visualization_Lab_key.R) | Data Visualization |
+| 5  | 2016-06-17 | Module 11  | [HTML](Statistics/lecture/Statistics.html), [PDF](Statistics/lecture/Statistics.pdf), [Code](Statistics/lecture/Statistics.R) | Statistics |
+| 5  | 2016-06-17 | Module 12  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd), [Lab](Knitr/lab/illusion.Rmd) | Reproducible Research |
 
 <!--
-|---|---|---|---|---|
-| 5  | 2016-01-08 | Module 11  | [HTML](Statistics/lecture/Statistics.html), [PDF](Statistics/lecture/Statistics.pdf), [Code](Statistics/lecture/Statistics.R) | Statistics |
-| 5  | 2016-01-08 | Module 12  | [HTML](Functions/lecture/Functions.html), [PDF](Functions/lecture/Functions.pdf), [Code](Functions/lecture/Functions.R) | Functions |
-| 5  | 2016-01-08 | Module 13a  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd), [Lab](Knitr/lab/illusion.Rmd) | Reproducible Research (A) |
-| 5  | 2016-01-08 | Module 13b  | [HTML](Simple_Knitr/lecture/Simple_Knitr.html), [PDF](Simple_Knitr/lecture/Simple_Knitr.pdf), [Code](Simple_Knitr/lecture/Simple_Knitr.Rmd) | Reproducible Research (B)|
+| 5  | 2016-01-08 | Module 12  | [HTML](Functions/lecture/Functions.html), [PDF](Functions/lecture/Functions.pdf), [Code](Functions/lecture/Functions.R) | Functions || 5  | 2016-01-08 | Module 13b  | [HTML](Simple_Knitr/lecture/Simple_Knitr.html), [PDF](Simple_Knitr/lecture/Simple_Knitr.pdf), [Code](Simple_Knitr/lecture/Simple_Knitr.Rmd) | Reproducible Research (B)|
 | 5  | 2016-01-08 | HW Review  |  |  |
 |---|---|---|---|---|
 -->
