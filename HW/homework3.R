@@ -10,6 +10,13 @@
 
 # B) Use Knitr to write up this homework. 
 
+kids2 = read.csv(
+  "http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv", 
+                stringsAsFactors=FALSE)
+kids <- read.csv("http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv", 
+                 row.names=1, stringsAsFactors=FALSE)
+
+tkids = t(kids)
 # Questions
 # 1.	Create a integer ‘year’ variable using the column names, 
 #			and print the head() and class() of this new vector
