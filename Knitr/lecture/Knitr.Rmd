@@ -9,9 +9,7 @@ output:
     toc: yes
 ---
 
-```{r}
-library(dplyr)
-```
+
 The three "back ticks" (\`) must be followed by curly brackets "{", and then "r" to tell the computer that you are using R code.  This line is then closed off by another curly bracket "}". 
 
 Anything before three more back ticks "```" are then considered R code (a script).  
@@ -19,7 +17,7 @@ Anything before three more back ticks "```" are then considered R code (a script
 If any code in the document has just a backtick \` then nothing, then another backtick, then that word is just printed as if it were code, such as `hey`.
 
 I'm reading in the bike lanes here.
-```{r readin}
+```{r readin, message = FALSE}
 # readin is just a "label" for this code chunk
 ## code chunk is just a "chunk" of code, where this code usually
 ## does just one thing, aka a module
@@ -46,13 +44,18 @@ Let's look at some plots of bike length.  Let's say we wanted to look at what af
 ### Plots of bike length
 Note we made the subsection by using three "hashes" (pound signs): ###.
 
-We can turn off R code output by using `echo = FALSE` on the knitr code chunk.  s
+We can turn off R code output by using `echo = FALSE` on the knitr code chunks.
 
 ```{r, echo = FALSE}
-no.missyear <- bike[ bike$dateInstalled != 0,]
+no.missyear <- bike %>% filter(dateInstalled != 0)
 plot(no.missyear$dateInstalled, no.missyear$length)
-no.missyear$dateInstalled = factor(no.missyear$dateInstalled)
-boxplot(no.missyear$length ~ no.missyear$dateInstalled, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
+```
+
+```{r, echo = TRUE}
+no.missyear = no.missyear %>%  mutate(dateInstalled = factor(dateInstalled)) 
+library(ggplot2)
+gbox = no.missyear %>% ggplot(aes(x = dateInstalled, y = length)) + geom_boxplot()
+print(gbox)
 ```
 
 We have a total of `r nrow(no.missyear)` rows.
@@ -60,15 +63,30 @@ We have a total of `r nrow(no.missyear)` rows.
 What does it look like if we took the log (base 10) of the bike length:
 
 ```{r}
-no.missyear$log.length <- log10(no.missyear$length)
+no.missyear <- no.missyear %>% mutate(log.length = log10(length))
 ### see here that if you specify the data argument, you don't need to do the $ 
-boxplot(log.length ~ dateInstalled, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
+boxplot(log.length ~ dateInstalled, data = no.missyear, 
+        main = "Boxplots of Bike Lenght by Year", 
+        xlab="Year", 
+        ylab="Bike Length")
+
+glogbox = no.missyear %>% ggplot(aes(x = dateInstalled, y = log.length)) + geom_boxplot() + 
+  ggtitle("Boxplots of Bike Lenght by Year") + 
+  xlab("Year") + 
+  ylab("Bike Length")
+print(glogbox)
 ```
 
 I want my boxplots colored, so I set the `col` argument.
 
 ```{r}
-boxplot(log.length ~ dateInstalled, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length", col="red")
+boxplot(log.length ~ dateInstalled, 
+        data=no.missyear, 
+        main="Boxplots of Bike Lenght by Year",
+        xlab="Year", 
+        ylab="Bike Length", 
+        col="red")
+glogbox + geom_boxplot(fill = "red")
 ```
 
 As we can see, 2006 had a much higher bike length.  What about for the type of bike path?
@@ -80,70 +98,49 @@ As we can see, 2006 had a much higher bike length.  What about for the type of b
 boxplot(log.length ~ type, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
 ```
 
+## Multiple Facets
+
+We can do the plot with different panels for each type.
+
+```{r}
+glogbox + facet_wrap(~ type)
+```
+
+NOTE, this is different than if we colored on type:
+
+```{r}
+glogbox + aes(colour = type)
+```
+
+### Means by type
 What if we want to extract means by each type?
 
 Let's show a few ways:
 ```{r}
-### tapply takes in vector 1, then does a function by vector 2, and then you tell what 
-### that function is
-tapply(no.missyear$log.length, no.missyear$type, mean)
-
-## aggregate
-aggregate(x=no.missyear$log.length, by=list(no.missyear$type), FUN=mean)
-### now let's specify the data argument and use a "formula" - much easier to read and 
-## more "intuitive"
-aggregate(log.length ~ type, data=no.missyear, FUN=mean)
-
-## ddply is from the plyr package
-##takes in a data frame, (the first d refers to data.frame) 
-## splits it up by some variables (let's say type)
-## then we'll use summarise to summarize whatever we want
-## then returns a data.frame (the second d) - hence why it's ddply
-## if we wanted to do it on a "list" thne return data.frame, it'd be ldply
-ddply(no.missyear, .(type), plyr::summarise,
-      mean=mean(log.length)
-      )
-
 no.missyear %>% group_by(type) %>% 
-  dplyr::summarise(mean=mean(log.length))
+  dplyr::summarise(mean = mean(log.length))
 ```
 
-
-`ddply` (and other functions in the `plyr` package) is cool because you can do multiple functions really easy.   
 
 Let's show a what if we wanted to go over `type` and `dateInstalled`:
 ```{r}
-### For going over 2 variables, we need to do it over a "list" of vectors
-tapply(no.missyear$log.length, 
-       list(no.missyear$type, no.missyear$dateInstalled), 
-       mean)
-
-tapply(no.missyear$log.length, 
-       list(no.missyear$type, no.missyear$dateInstalled), 
-       mean, na.rm=TRUE)
-
-## aggregate - looks better
-aggregate(log.length ~ type + dateInstalled, data=no.missyear, FUN=mean)
-
-## ddply is from the plyr package
-ddply(no.missyear, .(type, dateInstalled), summarise,
-      mean=mean(log.length),
-      median=median(log.length),
-      Mode=mode(log.length),
-      Std.Dev=sd(log.length)
-      )
+no.missyear %>% group_by(type, dateInstalled) %>% 
+  dplyr::summarise(mean = mean(log.length),
+      median = median(log.length),
+      Std.Dev = sd(log.length))
 ```
 
 
+## Linear Models
 
-OK let's do an linear model
+OK let's do some linear model
 ```{r}
 ### type is a character, but when R sees a "character" in a "formula", then it automatically converts it to factor
 ### a formula is something that has a y ~ x, which says I want to plot y against x
 ### or if it were a model you would do y ~ x, which meant regress against y
-mod.type = lm(log.length ~ type, data=no.missyear)
-mod.yr = lm(log.length ~ factor(dateInstalled), data=no.missyear)
-mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data=no.missyear)
+mod.type = lm(log.length ~ type, data = no.missyear)
+mod.yr = lm(log.length ~ factor(dateInstalled), data = no.missyear)
+mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data = no.missyear)
 summary(mod.type)
 ```
 
@@ -170,6 +167,14 @@ class(smod2)
 better = smod2 %>% mutate(term = str_replace(term, "^type", ""))
 better
 better %>% filter(term == "SIDEPATH")
+write.csv(better, file = "Best_Model_Coefficients.csv")
+```
+
+BUT I NEEEEEED an XLSX!  The `xlsx` package can do it, but I still tend to use CSVs.
+
+```{r}
+library(xlsx)
+write.xlsx(better, file = "Best_Model_Coefficients.xlsx")
 ```
 
 
