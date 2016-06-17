@@ -147,7 +147,31 @@ mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data=no.missyear)
 summary(mod.type)
 ```
 
-That's rather UGLY, so let's use a package called `xtable` and then make this model into an `xtable` object and then print it out nicely.  
+That's rather UGLY, so let's use a package called `pander` and then make this model into an `pander` object and then print it out nicely.  
+
+## Grabbing coefficients
+
+We can use the `coef` function on a summary, or do `smod$coef` to get the coefficients.  But they are in a `matrix`:
+
+```{r}
+smod = summary(mod.type)
+coef(smod)
+class(coef(smod))
+```
+
+### Broom package
+
+The `broom` package can "tidy" up the output to actually put the terms into a column of a data.frame that you can grab values from:
+
+```{r}
+library(broom)
+smod2 = tidy(mod.type)
+class(smod2)
+better = smod2 %>% mutate(term = str_replace(term, "^type", ""))
+better
+better %>% filter(term == "SIDEPATH")
+```
+
 
 ## Pander
 
