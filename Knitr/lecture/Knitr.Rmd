@@ -25,7 +25,6 @@ I'm reading in the bike lanes here.
 ### you can do all your reading in there
 ### let's say we loaded some packages
 library(stringr)
-library(plyr)
 library(dplyr)
 fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
 bike = read.csv(fname, as.is = TRUE)
@@ -279,12 +278,21 @@ Let's say I want to get data INTO my text.  Like there are N number of bike lane
 
 ```{r computes}
 ### let's get number of bike lanes installed by year
-n.lanes = ddply(no.missyear, .(dateInstalled), nrow)
-names(n.lanes) <- c("date", "nlanes")
-n2009 <- n.lanes$nlanes[ n.lanes$date == 2009]
-n2010 <- n.lanes$nlanes[ n.lanes$date == 2010]
+n.lanes = no.missyear %>% group_by(dateInstalled) %>% dplyr::summarize(n())
+class(n.lanes)
+print(n.lanes)
+n.lanes = as.data.frame(n.lanes)
+print(n.lanes)
+```
+
+
+```{r}
+colnames(n.lanes) <- c("date", "nlanes")
+n2009 <- filter(n.lanes, date == 2009)
+n2010 <- filter(n.lanes, date == 2010)
 getwd()
 ```
+
 
 Now I can just say there are `r n2009` lanes in 2009 and `r n2010` in 2010.  
 
@@ -365,6 +373,7 @@ gfacet + geom_smooth(se=FALSE)
 ```
 
 OK, I've seen enough code, let's turn that off, using `echo=FALSE`.
+
 ```{r, echo=FALSE, warning=FALSE, fig.width=10, fig.height=5}
 #### COMBINE! - let's make the line width bigger (lwd)
 ### also making the "alpha level" (transparency) low for the point sos we can see the lines
