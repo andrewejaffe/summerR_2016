@@ -28,6 +28,7 @@ I'm reading in the bike lanes here.
 ### let's say we loaded some packages
 library(stringr)
 library(dplyr)
+library(tidyr)
 fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
 bike = read.csv(fname, as.is = TRUE)
 ```
@@ -219,34 +220,41 @@ pander(summary(mod.yr))
 ### Formatting
 Let's format the rows and the column names a bit better:
 
-#### Rownames 
+#### Changing the terms 
 
 ```{r}
-ptable = summary(mod.yr)$coef
-ptable = as.data.frame(ptable) # need for dplyr
-rn = rownames(ptable)
-rn = rn %>% str_replace(fixed("factor(dateInstalled)"), "") %>% 
+ptable = tidy(mod.yr)
+ptable$term = ptable$term %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
   str_replace(fixed("(Intercept)"), "Intercept")
-print(rn)
-rownames(ptable) = rn
 ```
 
 #### Column Names
-Now we can reset the column names. 
+Now we can reset the column names if we didn't like them before:
+
 ```{r}
-colnames(ptable) = c("Beta", "SE", "t.Statistic", "p.value")
+colnames(ptable) = c("Variable", "Beta", "SE", "tstatistic", "p.value")
 pander(ptable)
 ```
 
 #### Confidence Intervals
-Let's say we want the beta, the 95% CI.  We can use `confint` on the model, `cbind` it to `ptable` and then paste the columns together (after rounding) with a comma and bound them in parentheses.
+
+Let's say we want the beta, the 95% CI.  We can use `confint` on the model, `merge` it to `ptable` and then paste the columns together (after rounding) with a comma and bound them in parentheses.
 
 ```{r}
-library(dplyr)
-colnames(ptable) = c("Beta", "SE", "t.Statistic", "p.value")
 cint = confint(mod.yr)
-colnames(cint) = c("lower", "upper")
-ptable = cbind(ptable, cint)
+print(cint)
+print(class(cint))
+```
+
+Tidying it up
+```{r}
+cint = tidy(cint)
+colnames(cint) = c("Variable", "lower", "upper")
+cint$Variable = cint$Variable %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+ptable = left_join(ptable, cint, by = "Variable")
 ptable = ptable %>% mutate(lower = round(lower, 2),
                            upper = round(lower, 2),
                            Beta = round(Beta, 2),
@@ -269,13 +277,44 @@ OK, that's pretty good, but let's say we have all three models.  You can't put d
 If we use the `memisc` package, we can combine the models:
 ```{r, message = FALSE}
 library(memisc)
-mtab_all <- mtable("Model Year"=mod.yr,"Model Type"=mod.type,"Model Both"=mod.yrtype,
-                    summary.stats = c("sigma","R-squared","F","p","N"))
+mtab_all <- mtable("Model Year" = mod.yr,
+                   "Model Type" = mod.type,
+                   "Model Both" = mod.yrtype, 
+                   summary.stats = c("sigma","R-squared","F","p","N"))
+print(mtab_all)
+```
+
+If you want to write it out (for Excel), it is tab delimited:
+
+```{r}
 write.mtable(mtab_all, file = "my_tab.txt")
+```
+
+```{r}
 pander(mtab_all)
 ```
-                    
 
+### Not covered - making `mtable` better:
+```{r}
+renamer = function(model) {
+  names(model$coefficients) = names(model$coefficients) %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+  names(model$contrasts) = names(model$contrasts) %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+  return(model)
+}
+mod.yr = renamer(mod.yr)
+mod.yrtype = renamer(mod.yrtype)
+mod.type = renamer(mod.type)
+
+mtab_all_better <- mtable("Model Year" = mod.yr,
+                   "Model Type" = mod.type,
+                   "Model Both" = mod.yrtype, 
+                   summary.stats = c("sigma","R-squared","F","p","N"))
+pander(mtab_all_better)
+```
 
 
 Another package called `stargazer` can put models together easily and print them out.  So let's use stargazer.  Again, you need to use `install.packages("stargazer")` if you don't have function.  
