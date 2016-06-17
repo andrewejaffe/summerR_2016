@@ -7,6 +7,8 @@ output:
     toc: yes
   pdf_document:
     toc: yes
+  word_document:
+    toc: yes
 ---
 
 
@@ -143,6 +145,7 @@ mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data = no.missyear)
 summary(mod.type)
 ```
 
+
 That's rather UGLY, so let's use a package called `pander` and then make this model into an `pander` object and then print it out nicely.  
 
 ## Grabbing coefficients
@@ -175,6 +178,26 @@ BUT I NEEEEEED an XLSX!  The `xlsx` package can do it, but I still tend to use C
 library(xlsx)
 write.xlsx(better, file = "Best_Model_Coefficients.xlsx")
 ```
+
+### Testing Nested Models
+
+The `anova` command will test nested models and give you a table of results:
+
+```{r}
+my_lrtest = anova(mod.yrtype, mod.yr)
+print(my_lrtest)
+print(tidy(my_lrtest))
+```
+
+Similarly with year:
+
+```{r}
+my_lrtest = anova(mod.yrtype, mod.type)
+print(tidy(my_lrtest))
+```
+
+ASIDE: the `aov` function fits what you think of when you think ANOVA.
+
 
 
 ## Pander
