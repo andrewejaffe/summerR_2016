@@ -19,6 +19,7 @@ colnames(circ) =  colnames(circ) %>%
   str_replace("Alight", ".Alight") %>% 
   str_replace("Average", ".Average") 
 circ$daily = NULL # remove
+
 # make long
 long = gather(circ, "var", "number", 
               starts_with("orange"),
@@ -63,12 +64,10 @@ qplot(x = date, y = number, data= avg, facets = ~day,
 #		as a solid line, and add dashed "error" lines based 
 #		on the boardings and alightings. 
 #	the line colors should be orange.
-orange = filter(long, line=="orange")
-orangeList = split(orange, orange$type)
-plot(number ~ date, data =orangeList$Average,
-	col="orange", type="l", subset= 1:100)
-lines(number ~ date, data =orangeList$Alighting,
+orange = circ[,c(1:2, grep("orange", colnames(circ)))]
+plot(orange.Average ~ date, data =orange,
+	col="orange", type="l", subset=1:100)
+lines(orange.Alightings ~ date, data =orange,
 	col="orange", type="l", lty=2)
-lines(number ~ date, data =orangeList$Boarding,
+lines(orange.Boardings ~ date, data =orange,
 	col="orange", type="l", lty=2)
-orange = gather(orange, type, number)
