@@ -34,7 +34,7 @@ Summer R 2016
 | 2  | 2016-06-14  | Homework 2  | [HW ](HW/homework2.R)  |   |
 | 2  | 2016-06-14 | Module 5  | [HTML](Data_Classes/lecture/Data_Classes.html), [PDF](Data_Classes/lecture/Data_Classes.pdf), [Code](Data_Classes/lecture/Data_Classes.R) | Data Classes
 | 2  | 2016-06-14  | Module 6  | [HTML](Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html), [PDF](Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.pdf), [Code](Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.R),  [Lab](Subsetting_Data_in_R/lab/Subsetting_Data_in_R_Lab.R), [Key](Subsetting_Data_in_R/lab/Subsetting_Data_in_R_Lab_Key.R) | Subsetting Data |
-| 3  | 2016-06-15  | Homework 3  | [HW ](HW/homework3.R)  |   |
+| 3  | 2016-06-15  | Homework 3  | [HW ](HW/homework3.R),[Key](HW/homework3_key.Rmd)  |   |
 | 3  | 2016-06-15 | Module 7 | [HTML](Data_Summarization/lecture/Data_Summarization.html), [PDF](Data_Summarization/lecture/Data_Summarization.pdf), [Code](Data_Summarization/lecture/Data_Summarization.R), [Lab](Data_Summarization/lab/Data_Summarization_Lab.R), [Key](Data_Summarization/lab/Data_Summarization_Lab_Key.R) | Data Summarization |
 | 3  | 2016-06-15 | Module 8  | [HTML](Data_Cleaning/lecture/Data_Cleaning.html), [PDF](Data_Cleaning/lecture/Data_Cleaning.pdf), [Code](Data_Cleaning/lecture/Data_Cleaning.R), [Lab](Data_Cleaning/lab/Data_Cleaning_Lab.R), [Key](Data_Cleaning/lab/Data_Cleaning_Lab_key.R) | Data Cleaning |
 | 4  | 2016-06-16 | Module 9  | [HTML](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html), [PDF](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf), [Code](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.R) | Data Manipulation |
